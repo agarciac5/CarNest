@@ -11,7 +11,6 @@ class Anuncio(models.Model):
 
     descripcion = models.TextField()
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
-    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return f"Anuncio de {self.vehiculo}"

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Publicar Vehículo{% endblock %}
+
+{% block content %}
+
+<h2>Publicar Vehículo</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Marca</label>
+        <input type="text" name="marca" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Modelo</label>
+        <input type="text" name="modelo" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Año</label>
+        <input type="number" name="año" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Precio</label>
+        <input type="number" name="precio" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-success">Publicar</button>
+
+</form>
+
+{% endblock %}

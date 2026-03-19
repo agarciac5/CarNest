@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventario{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+    <a href="/inventario/crear/" class="btn btn-primary mb-3">+ Publicar vehículo</a>
+{% endif %}
+
+<h2 class="mb-4">Vehículos disponibles</h2>
+
+<div class="row">
+    {% for v in vehiculos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+*
+                <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="vehiculo">
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ v.marca }} {{ v.modelo }}</h5>
+
+                    <p class="card-text">
+                        <strong>Año:</strong> {{ v.año }}
+                    </p>
+
+                    <h4 class="text-primary">${{ v.precio }}</h4>
+
+                    {% if v.disponible %}
+                        <span class="badge bg-success">Disponible</span>
+                    {% else %}
+                        <span class="badge bg-danger">No disponible</span>
+                    {% endif %}
+                </div>
+
+                <div class="card-footer text-center">
+                    <a href="#" class="btn btn-outline-primary btn-sm">Ver más</a>
+                </div>
+
+            </div>
+        </div>
+    {% empty %}
+        <p>No hay vehículos disponibles.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
