@@ -10,4 +10,4 @@ def registro(request):
     else:
         form = RegistroForm()
 
-    return render(request, 'usuarios/registro.html', {'form': form})
+    return render(request, 'usuarios/signup.html', {'form': form})
