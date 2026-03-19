@@ -7,6 +7,8 @@ def registro(request):
         if form.is_valid():
             form.save()
             return redirect('login')
+        else:
+            print(form.errors)
     else:
         form = RegistroForm()
 
