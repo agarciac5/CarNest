@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Anuncios{% endblock %}
+
+{% block content %}
+
+<h2 class="mb-4">Anuncios de vehículos</h2>
+
+
+
+<div class="row">
+
+    {% for vehiculo in vehiculos %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+
+                {% if vehiculo.imagen %}
+                    <img src="{{ vehiculo.imagen.url }}" class="card-img-top">
+                {% else %}
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ vehiculo.marca }} {{ vehiculo.modelo }}
+                    </h5>
+
+                    <p class="card-text">
+                        Año: {{ vehiculo.año }}
+                    </p>
+
+                    <h4>${{ vehiculo.precio }}</h4>
+                </div>
+
+                <div class="card-footer text-center">
+                    <a href="{% url 'comprar_vehiculo' vehiculo.id %}" class="btn btn-dark btn-sm">
+                        Comprar para la concesionaria
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

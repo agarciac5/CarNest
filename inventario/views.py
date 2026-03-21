@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def lista_vehiculos(request):
-    vehiculos = vehiculos = Vehiculo.objects.filter(estado='comprado')
+    vehiculos = vehiculos = Vehiculo.objects.filter(estado='en_venta')
 
     return render(request, 'inventario/inventary.html', {
         'vehiculos': vehiculos
