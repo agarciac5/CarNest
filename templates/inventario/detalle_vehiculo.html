@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cop_format %}
+
+{% block title %}{{ vehiculo.marca }} {{ vehiculo.modelo }} — CarNest{% endblock %}
+
+{% block content %}
+<link href="{% static 'css/inventario.css' %}" rel="stylesheet">
+
+<div class="inv-detail-page">
+    <div class="inv-detail-topnav d-flex flex-wrap align-items-center gap-2 mb-4">
+        <a href="/" class="inv-detail-link-btn">Inicio</a>
+        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn">Vehículos</a>
+        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn inv-detail-link-btn--accent">Volver al catálogo</a>
+        <div class="ms-lg-auto d-flex flex-wrap gap-2">
+            {% if prev_id %}
+                <a class="inv-detail-link-btn inv-detail-link-btn--nav" href="{% url 'detalle_vehiculo' prev_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">Anterior</a>
+            {% else %}
+                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">Anterior</span>
+            {% endif %}
+            {% if next_id %}
+                <a class="inv-detail-link-btn inv-detail-link-btn--nav" href="{% url 'detalle_vehiculo' next_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">Siguiente</a>
+            {% else %}
+                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">Siguiente</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row g-4 inv-detail-grid">
+        <div class="col-lg-7">
+            <div class="inv-detail-hero shadow-sm">
+                {% with extras=vehiculo.fotos_extra.all %}
+                {% if vehiculo.imagen or extras %}
+                    <div id="carouselVehiculo" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            {% if vehiculo.imagen %}
+                                <div class="carousel-item active">
+                                    <img src="{{ vehiculo.imagen.url }}" class="d-block w-100" alt="{{ vehiculo.marca }} {{ vehiculo.modelo }}">
+                                </div>
+                            {% endif %}
+                            {% for f in extras %}
+                                <div class="carousel-item {% if not vehiculo.imagen and forloop.first %}active{% endif %}">
+                                    <img src="{{ f.imagen.url }}" class="d-block w-100" alt="Foto {{ forloop.counter }}">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if vehiculo.imagen and extras or not vehiculo.imagen and extras|length > 1 %}
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselVehiculo" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Anterior</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselVehiculo" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Siguiente</span>
+                            </button>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="ratio ratio-16x9 bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center inv-detail-no-photo">
+                        <span>Sin fotos</span>
+                    </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="inv-detail-info">
+                <h1 class="inv-detail-title">{{ vehiculo.marca }} {{ vehiculo.modelo }}</h1>
+                <p class="inv-detail-price mb-4">
+                    <span class="inv-detail-price-label">Precio</span>
+                    <span class="inv-detail-price-line d-block mt-2">
+                        <span class="inv-detail-price-symbol">$</span><span class="inv-detail-price-digits">{{ vehiculo.precio|cop_enteros }}</span>
+                        <span class="inv-detail-price-currency">COP</span>
+                    </span>
+                </p>
+                <dl class="row inv-specs inv-specs--detail mb-0">
+                    <dt class="col-5">Año</dt>
+                    <dd class="col-7">{{ vehiculo.año }}</dd>
+                    <dt class="col-5">Kilometraje</dt>
+                    <dd class="col-7">{{ vehiculo.kilometraje|cop_enteros }} km</dd>
+                    <dt class="col-5">Color</dt>
+                    <dd class="col-7">{{ vehiculo.color|default:"—" }}</dd>
+                    <dt class="col-5">Combustible</dt>
+                    <dd class="col-7">{{ vehiculo.get_combustible_display }}</dd>
+                    <dt class="col-5">Transmisión</dt>
+                    <dd class="col-7">{{ vehiculo.get_transmision_display }}</dd>
+                    <dt class="col-5">Publicado</dt>
+                    <dd class="col-7">{{ vehiculo.fecha_publicacion|date:"d M Y" }}</dd>
+                </dl>
+                {% if vehiculo.descripcion %}
+                    <h2 class="inv-detail-section-title mt-4">Descripción</h2>
+                    <div class="inv-detail-desc">{{ vehiculo.descripcion|linebreaks }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

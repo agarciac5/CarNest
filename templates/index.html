@@ -1,16 +1,24 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Inicio{% endblock %}
+{% block title %}Inicio — CarNest{% endblock %}
 
 {% block content %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
 
-<h1>Bienvenido a CarNest</h1>
-
-<p>Plataforma para comprar y vender vehículos.</p>
-
-<hr>
-
-<a href="/inventario/" class="btn btn-dark">Ver vehículos</a>
-
-
+<section class="home-hero mb-4">
+    <div class="home-hero-inner">
+        {% if carnest_logo_url %}
+            <img src="{{ carnest_logo_url }}" alt="Logo CarNest" class="home-logo">
+        {% endif %}
+        <h1 class="visually-hidden">CarNest — Inicio</h1>
+        <p class="home-intro">
+            Bienvenido a CarNest, el portal de confianza donde podrás vender tu Auto y encontrar el de tus sueños;
+            con muchísimas referencias de las que elegir. Nunca fue tan fácil.
+        </p>
+        <div class="home-cta-wrap">
+            <a href="{% url 'lista_vehiculos' %}" class="btn btn-carnest-cta">Ver vehículos</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

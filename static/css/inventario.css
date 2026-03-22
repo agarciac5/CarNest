@@ -1,0 +1,238 @@
+/* Catálogo y detalle de vehículos */
+.inv-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 45%, #0ea5e9 100%);
+  color: #fff;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.35);
+}
+.inv-hero h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.inv-search .form-control {
+  border-radius: 999px;
+  padding-left: 1.25rem;
+}
+.inv-search .btn {
+  border-radius: 999px;
+}
+.inv-card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
+}
+.inv-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+}
+.inv-card .ratio img {
+  object-fit: cover;
+}
+.inv-card .price {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0ea5e9;
+}
+.inv-badge {
+  font-size: 0.75rem;
+}
+.inv-detail-hero {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #0f172a;
+}
+.inv-detail-hero .carousel-item img {
+  max-height: 420px;
+  object-fit: cover;
+  width: 100%;
+}
+.inv-specs dt {
+  font-weight: 600;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+.inv-specs dd {
+  margin-bottom: 0.75rem;
+}
+.inv-nav-pill .btn {
+  border-radius: 999px;
+}
+
+/* ——— Ficha detalle vehículo ——— */
+.inv-detail-page {
+  background: linear-gradient(160deg, #12121a 0%, #1a1a28 40%, #14141f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.5rem 2.25rem;
+  margin-bottom: 2rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 16px 40px rgba(0, 0, 0, 0.45);
+}
+
+.inv-detail-topnav .inv-detail-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #f1f5f9 !important;
+  background: #3f4f63;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+  transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.inv-detail-topnav .inv-detail-link-btn:hover {
+  color: #fff !important;
+  background: #55657a;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32);
+}
+
+.inv-detail-link-btn--accent {
+  background: #6b5c4c !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #fafaf9 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28) !important;
+}
+
+.inv-detail-link-btn--accent:hover {
+  background: #7d6d5a !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32) !important;
+}
+
+.inv-detail-link-btn--nav {
+  background: #4a4a5c !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28) !important;
+}
+
+.inv-detail-link-btn--nav:hover {
+  background: #5c5c72 !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.32) !important;
+}
+
+.inv-detail-link-btn--disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
+  filter: grayscale(0.35);
+  box-shadow: none !important;
+}
+
+.inv-detail-grid {
+  align-items: flex-start;
+}
+
+.inv-detail-hero {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inv-detail-no-photo {
+  color: #e2e8f0;
+  font-size: 1.1rem;
+}
+
+.inv-detail-info {
+  padding: 0.25rem 0.5rem 0.5rem;
+}
+
+.inv-detail-title {
+  color: #bae6fd;
+  font-weight: 800;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+
+.inv-detail-price-label {
+  display: block;
+  color: #f8fafc;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.inv-detail-price-line {
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.inv-detail-price-symbol,
+.inv-detail-price-currency {
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.inv-detail-price-currency {
+  margin-left: 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.inv-detail-price-digits {
+  font-size: clamp(1.45rem, 3.2vw, 1.82rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #c9b27a;
+}
+
+.inv-specs--detail {
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+
+.inv-specs--detail dt {
+  color: #f8fafc;
+  font-weight: 600;
+  font-size: 1.02rem;
+}
+
+.inv-specs--detail dd {
+  color: #ffffff;
+  font-weight: 500;
+  margin-bottom: 0.85rem;
+}
+
+.inv-detail-section-title {
+  color: #e0f2fe;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.65rem;
+}
+
+.inv-detail-desc,
+.inv-detail-desc p {
+  color: #ffffff;
+  font-size: 1.08rem;
+  line-height: 1.65;
+  margin-bottom: 0.5rem;
+}
+
+.inv-detail-hero .carousel-control-prev-icon,
+.inv-detail-hero .carousel-control-next-icon {
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+.inv-detail-hero .carousel-control-prev,
+.inv-detail-hero .carousel-control-next {
+  width: 11%;
+  opacity: 1;
+}

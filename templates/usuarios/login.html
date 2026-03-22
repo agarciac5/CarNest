@@ -1,31 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'auth_base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Iniciar sesión — CarNest{% endblock %}
+
+{% block auth_nav_extra %}
+    <a href="{% url 'registro' %}" class="btn btn-outline-light">Crear cuenta</a>
+{% endblock %}
 
 {% block content %}
+<div class="card auth-card shadow-lg">
+    <div class="card-body">
+        <h2 class="h4 mb-1">Iniciar sesión</h2>
+        <p class="text-secondary small mb-4">Accede a tu cuenta para publicar y gestionar vehículos.</p>
 
-<h2>Iniciar sesión</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-info py-2 small">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="id_username">Usuario</label>
+                <input type="text" name="username" id="id_username" class="form-control" required autocomplete="username">
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="id_password">Contraseña</label>
+                <input type="password" name="password" id="id_password" class="form-control" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">Entrar</button>
+        </form>
 
-<form method="post">
-    {% csrf_token %}
-
-    <div class="mb-3">
-        <label>Username</label>
-        <input type="text" name="username" class="form-control">
+        <p class="text-center small mt-4 mb-0 auth-links">
+            ¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>
+        </p>
     </div>
-
-    <div class="mb-3">
-        <label>Password</label>
-        <input type="password" name="password" class="form-control">
-    </div>
-
-    <button type="submit" class="btn btn-success">Entrar</button>
-</form>
-
+</div>
 {% endblock %}
