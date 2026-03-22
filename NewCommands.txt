@@ -1,2 +1,16 @@
-docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
+# Levantar app + PostgreSQL (migraciones al arrancar el contenedor web)
+docker compose up --build
+
+# Migraciones manuales dentro del contenedor
+docker compose exec web python manage.py makemigrations
+docker compose exec web python manage.py migrate
+
+# Datos de ejemplo (opcional)
+docker compose exec web python manage.py seed_inventario
+
+# Superusuario david / 12345 (desarrollo)
+python manage.py create_superuser_david
+docker compose exec web python manage.py create_superuser_david
+
+# Sin Docker: sigue usando SQLite (no definas POSTGRES_DB).
+# Django en tu PC contra Postgres del compose: POSTGRES_HOST=localhost y puerto 5432.
