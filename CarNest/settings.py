@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-)x68ubl_=f21h9lrtq65=8x9v=0f#ypoyb=po8+9zz2#m11pey
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'core.apps.CoreConfig',
     'anuncios',
     'inventario',
     'usuarios',
@@ -63,8 +65,10 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.carnest_branding',
             ],
         },
     },
@@ -121,6 +125,13 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Opcional: ruta relativa a MEDIA_ROOT para el logo (si está vacío, se busca *gemini* en media/vehiculos/)
+CARNEST_LOGO_PATH = ''
+
+LOGIN_URL = '/usuarios/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

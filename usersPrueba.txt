@@ -1,2 +1,7 @@
+# Usuario demo (creado por seed_inventario)
+carnest_demo
+demo12345
+
+# Ejemplo antiguo (crear con createsuperuser si lo necesitas)
 admin
 1234
