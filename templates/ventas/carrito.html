@@ -10,7 +10,7 @@
 
 <div class="carrito-header mb-4">
     <h1 class="h3">🛒 Mi carrito</h1>
-    <p class="text-muted">Revisa los vehículos seleccionados antes de confirmar tu compra.</p>
+    <p class="text-white">Revisa los vehículos seleccionados antes de confirmar tu compra.</p>
 </div>
 
 {% if messages %}
@@ -25,8 +25,8 @@
 {% if carrito_vacio %}
     <div class="carrito-empty text-center py-5">
         <img src="{% static 'img/carrito.png' %}" alt="Carrito vacío" style="width:64px;opacity:.4">
-        <h4 class="mt-3 text-muted">Tu carrito está vacío</h4>
-        <p class="text-muted">Explora el catálogo y añade vehículos que te interesen.</p>
+        <h4 class="mt-3 text-white">Tu carrito está vacío</h4>
+        <p class="text-white">Explora el catálogo y añade vehículos que te interesen.</p>
         <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary mt-3">
             Ver vehículos disponibles
         </a>
