@@ -26,7 +26,8 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
     path('inventario/', include('inventario.urls')),
     path('anuncios/', include('anuncios.urls')),
-]
+    path('', include('ventas.urls')),  
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

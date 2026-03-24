@@ -1,25 +1,32 @@
-from pathlib import Path
-
+import os
 from django.conf import settings
 
 
-def carnest_branding(_request):
+def carnest_branding(request):
     """
-    URL del logo CarNest en media (archivo con 'gemini' en el nombre dentro de
-    media/vehiculos/, o CARNEST_LOGO_PATH en settings).
+    Context processor global de CarNest.
+    Inyecta el logo y el conteo del carrito en todos los templates.
     """
-    media_url = settings.MEDIA_URL
-    if not str(media_url).startswith('/'):
-        media_url = '/' + str(media_url).lstrip('/')
-    media_url = str(media_url).rstrip('/')
+    logo_url = None
+    logo_path_setting = getattr(settings, 'CARNEST_LOGO_PATH', '')
 
-    preferred = getattr(settings, 'CARNEST_LOGO_PATH', None)
-    if preferred:
-        return {'carnest_logo_url': f'{media_url}/{str(preferred).lstrip("/")}'}
+    if logo_path_setting:
+        # Ruta explícita configurada en settings
+        logo_url = settings.MEDIA_URL + logo_path_setting
+    else:
+        # Buscar automáticamente un archivo con 'gemini' en media/vehiculos/
+        vehiculos_dir = os.path.join(settings.MEDIA_ROOT, 'vehiculos')
+        if os.path.isdir(vehiculos_dir):
+            for fname in os.listdir(vehiculos_dir):
+                if 'gemini' in fname.lower():
+                    logo_url = settings.MEDIA_URL + 'vehiculos/' + fname
+                    break
 
-    veh = Path(settings.MEDIA_ROOT) / 'vehiculos'
-    if veh.is_dir():
-        for p in sorted(veh.iterdir()):
-            if p.is_file() and 'gemini' in p.name.lower():
-                return {'carnest_logo_url': f'{media_url}/vehiculos/{p.name}'}
-    return {'carnest_logo_url': ''}
+    # ── AÑADIDO: contador del carrito ──────────────────────────────
+    carrito_count = len(request.session.get('carrito', []))
+    # ───────────────────────────────────────────────────────────────
+
+    return {
+        'carnest_logo_url': logo_url,
+        'carrito_count': carrito_count,  # ← disponible en todos los templates
+    }

@@ -141,7 +141,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Opcional: ruta relativa a MEDIA_ROOT para el logo (si está vacío, se busca *gemini* en media/vehiculos/)
 CARNEST_LOGO_PATH = ''

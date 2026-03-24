@@ -108,3 +108,4 @@ class FotoVehiculo(models.Model):
 
     def __str__(self):
         return f"Foto {self.pk} — {self.vehiculo}"
+

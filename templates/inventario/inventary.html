@@ -38,13 +38,21 @@
         <div class="col-md-6 col-xl-4">
             <article class="card inv-card h-100 shadow-sm">
                 <a href="{% url 'detalle_vehiculo' v.pk %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="text-decoration-none text-dark">
+                    
                     <div class="ratio ratio-16x9 bg-light">
+
                         {% if v.imagen %}
-                            <img src="{{ v.imagen.url }}" alt="{{ v.marca }} {{ v.modelo }}" loading="lazy">
+                            <img src="{{ v.imagen.url }}" alt="{{ v.marca }} {{ v.modelo }}" class="w-100 h-100 object-fit-cover" loading="lazy">
+
+                        {% elif v.fotos_extra.first %}
+                            <img src="{{ v.fotos_extra.first.imagen.url }}" alt="{{ v.marca }} {{ v.modelo }}" class="w-100 h-100 object-fit-cover" loading="lazy">
+
                         {% else %}
-                            <div class="d-flex align-items-center justify-content-center bg-secondary bg-opacity-10 text-secondary small">Sin foto</div>
+                            <img src="{% static 'img/default-car.jpg' %}" alt="Sin imagen" class="w-100 h-100 object-fit-cover" loading="lazy">
                         {% endif %}
+
                     </div>
+
                     <div class="card-body">
                         <h2 class="h5 card-title mb-1">{{ v.marca }} {{ v.modelo }}</h2>
                         <p class="text-muted small mb-2">{{ v.año }} · {{ v.get_combustible_display }} · {{ v.get_transmision_display }}</p>

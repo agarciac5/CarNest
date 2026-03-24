@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load cop_format %}
+
+{% block title %}Mis compras — CarNest{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+        <h1 class="h3 mb-1">📋 Mis compras</h1>
+        <p class="text-muted mb-0">Historial de vehículos adquiridos en CarNest.</p>
+    </div>
+    <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-light">
+        Ver catálogo
+    </a>
+</div>
+
+{% if messages %}
+    {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if not compras %}
+    <div class="text-center py-5">
+        <img src="{% static 'img/carrito.png' %}" alt="Sin compras" style="width:64px;opacity:.3">
+        <h4 class="text-muted mt-3">Aún no has realizado ninguna compra.</h4>
+        <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary mt-3">
+            Ver vehículos disponibles
+        </a>
+    </div>
+
+{% else %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle rounded overflow-hidden">
+            <thead class="table-secondary text-dark">
+                <tr>
+                    <th scope="col">Vehículo</th>
+                    <th scope="col">Año</th>
+                    <th scope="col">Combustible</th>
+                    <th scope="col">Transmisión</th>
+                    <th scope="col">Precio pagado</th>
+                    <th scope="col">Fecha de compra</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for venta in compras %}
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            {% if venta.vehiculo.imagen %}
+                                <img src="{{ venta.vehiculo.imagen.url }}"
+                                     style="width:64px;height:44px;object-fit:cover;border-radius:6px"
+                                     alt="{{ venta.vehiculo.marca }} {{ venta.vehiculo.modelo }}">
+                            {% else %}
+                                <img src="{% static 'img/default-car.jpg' %}"
+                                     style="width:64px;height:44px;object-fit:cover;border-radius:6px"
+                                     alt="Sin imagen">
+                            {% endif %}
+                            <span class="fw-semibold">
+                                {{ venta.vehiculo.marca }} {{ venta.vehiculo.modelo }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>{{ venta.vehiculo.año }}</td>
+                    <td>{{ venta.vehiculo.get_combustible_display }}</td>
+                    <td>{{ venta.vehiculo.get_transmision_display }}</td>
+                    <td class="price-compra">
+                        ${{ venta.precio_final|cop_enteros }} COP
+                    </td>
+                    <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+{% endblock %}

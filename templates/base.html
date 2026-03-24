@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}CarNest{% endblock %}</title>
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/nav.css' %}" rel="stylesheet">
 </head>
 <body class="body-carnest">
-
 
 <nav class="navbar navbar-dark navbar-carnest navbar-expand-lg">
     <div class="container">
@@ -17,22 +15,34 @@
 
         <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
             <a href="/inventario/" class="btn btn-outline-light">Vehículos</a>
+
             {% if user.is_authenticated and user.is_staff %}
                 <a href="/anuncios/" class="btn btn-outline-light">Anuncios</a>
             {% endif %}
 
             {% if request.user.is_authenticated %}
 
-                <a href="/carrito/" class="btn btn-outline-light">
+                <a href="/carrito/" class="btn btn-outline-light position-relative">
                     <img src="{% static 'img/carrito.png' %}" alt="Carrito">
+                    {% if carrito_count %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                              style="font-size:.65rem">
+                            {{ carrito_count }}
+                        </span>
+                    {% endif %}
                 </a>
 
                 <div class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         {{ request.user.username }}
                     </button>
-
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a href="{% url 'mis_compras' %}" class="dropdown-item">
+                                Mis compras
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
                             <form action="{% url 'logout' %}" method="post">
                                 {% csrf_token %}
@@ -45,20 +55,19 @@
                 </div>
 
             {% else %}
-
                 <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
                 <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
-
             {% endif %}
+
         </div>
     </div>
 </nav>
-
 
 <div class="container mt-4">
     {% block content %}
     {% endblock %}
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

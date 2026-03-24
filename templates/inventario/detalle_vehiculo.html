@@ -27,6 +27,8 @@
     </div>
 
     <div class="row g-4 inv-detail-grid">
+
+        <!-- ── Columna izquierda: carrusel de fotos ── -->
         <div class="col-lg-7">
             <div class="inv-detail-hero shadow-sm">
                 {% with extras=vehiculo.fotos_extra.all %}
@@ -63,9 +65,12 @@
                 {% endwith %}
             </div>
         </div>
+
+        <!-- ── Columna derecha: info + botón carrito ── -->
         <div class="col-lg-5">
             <div class="inv-detail-info">
                 <h1 class="inv-detail-title">{{ vehiculo.marca }} {{ vehiculo.modelo }}</h1>
+
                 <p class="inv-detail-price mb-4">
                     <span class="inv-detail-price-label">Precio</span>
                     <span class="inv-detail-price-line d-block mt-2">
@@ -73,6 +78,7 @@
                         <span class="inv-detail-price-currency">COP</span>
                     </span>
                 </p>
+
                 <dl class="row inv-specs inv-specs--detail mb-0">
                     <dt class="col-5">Año</dt>
                     <dd class="col-7">{{ vehiculo.año }}</dd>
@@ -87,12 +93,41 @@
                     <dt class="col-5">Publicado</dt>
                     <dd class="col-7">{{ vehiculo.fecha_publicacion|date:"d M Y" }}</dd>
                 </dl>
+
+                <!-- ── AÑADIDO: Botón agregar al carrito ──────────── -->
+                <div class="inv-detail-carrito mt-4">
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'agregar_carrito' vehiculo.pk %}">
+                            {% csrf_token %}
+                            {# Volver a esta misma página después de agregar #}
+                            <input type="hidden" name="next" value="{{ request.path }}{% if q %}?q={{ q|urlencode }}{% endif %}">
+                            <button type="submit" class="btn btn-primary btn-lg w-100 inv-btn-carrito">
+                                🛒 Agregar al carrito
+                            </button>
+                        </form>
+                        <a href="{% url 'ver_carrito' %}" class="btn btn-outline-light w-100 mt-2">
+                            Ver mi carrito
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}?next={{ request.path }}"
+                           class="btn btn-outline-light btn-lg w-100">
+                            Inicia sesión para comprar
+                        </a>
+                        <p class="text-muted small text-center mt-2 mb-0">
+                            ¿No tienes cuenta?
+                            <a href="{% url 'registro' %}" class="text-info">Regístrate gratis</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <!-- ── FIN botón carrito ───────────────────────────── -->
+
                 {% if vehiculo.descripcion %}
                     <h2 class="inv-detail-section-title mt-4">Descripción</h2>
                     <div class="inv-detail-desc">{{ vehiculo.descripcion|linebreaks }}</div>
                 {% endif %}
             </div>
         </div>
+
     </div>
 </div>
 {% endblock %}
