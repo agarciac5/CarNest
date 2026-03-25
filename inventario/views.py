@@ -1,6 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+import urllib.request
+import json
 
 from .models import Vehiculo, FotoVehiculo
 
@@ -47,11 +49,28 @@ def detalle_vehiculo(request, pk):
         except ValueError:
             pass
 
+    # ── Conversión COP → USD ────────────────────────────────────────
+    # Solo consulta la API si el usuario eligió inglés, para no hacer
+    # llamadas innecesarias cuando se usa en español.
+    precio_usd = None
+    if request.session.get('idioma') == 'en':
+        try:
+            url = 'https://open.er-api.com/v6/latest/COP'
+            with urllib.request.urlopen(url, timeout=3) as resp:
+                data = json.loads(resp.read())
+            tasa = data['rates'].get('USD', None)
+            if tasa:
+                precio_usd = round(float(vehiculo.precio) * tasa, 2)
+        except Exception:
+            precio_usd = None  # Si falla la API, no se muestra, sin romper nada
+    # ───────────────────────────────────────────────────────────────
+
     return render(request, 'inventario/detalle_vehiculo.html', {
         'vehiculo': vehiculo,
         'q': q,
         'prev_id': prev_id,
         'next_id': next_id,
+        'precio_usd': precio_usd,
     })
 
 

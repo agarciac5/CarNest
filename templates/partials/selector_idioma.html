@@ -1,0 +1,41 @@
+<div class="lang-overlay" id="langOverlay">
+    <div class="lang-box">
+        <div class="lang-logo">
+            <span class="lang-logo-text">CarNest</span>
+            <span class="lang-logo-sub">BUY · SELL · DRIVE</span>
+        </div>
+
+        <h2 class="lang-title">
+            Elige un idioma
+            <span class="lang-separator">/</span>
+            Choose a language
+        </h2>
+
+        <div class="lang-buttons">
+            <form method="post" action="" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="es">
+                <button type="submit" class="lang-btn lang-btn--es">
+                    <span class="lang-flag">🇨🇴</span>
+                    <span class="lang-label">Español</span>
+                </button>
+            </form>
+
+            <form method="post" action="" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="en">
+                <button type="submit" class="lang-btn lang-btn--en">
+                    <span class="lang-flag">🇺🇸</span>
+                    <span class="lang-label">English</span>
+                </button>
+            </form>
+        </div>
+
+        <p class="lang-note">
+            Puedes cambiar el idioma en cualquier momento desde el menú.
+            <br>You can change the language anytime from the menu.
+        </p>
+    </div>
+</div>

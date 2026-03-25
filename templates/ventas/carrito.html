@@ -3,14 +3,16 @@
 {% load humanize %}
 {% load cop_format %}
 
-{% block title %}Mi carrito — CarNest{% endblock %}
+{% block title %}{% if idioma == 'en' %}My cart — CarNest{% else %}Mi carrito — CarNest{% endif %}{% endblock %}
 
 {% block content %}
 <link href="{% static 'css/carrito.css' %}" rel="stylesheet">
 
 <div class="carrito-header mb-4">
-    <h1 class="h3">🛒 Mi carrito</h1>
-    <p class="text-white">Revisa los vehículos seleccionados antes de confirmar tu compra.</p>
+    <h1 class="h3">🛒 {% if idioma == 'en' %}My cart{% else %}Mi carrito{% endif %}</h1>
+    <p class="text-white">
+        {% if idioma == 'en' %}Review your selected vehicles before confirming your purchase.{% else %}Revisa los vehículos seleccionados antes de confirmar tu compra.{% endif %}
+    </p>
 </div>
 
 {% if messages %}
@@ -24,11 +26,15 @@
 
 {% if carrito_vacio %}
     <div class="carrito-empty text-center py-5">
-        <img src="{% static 'img/carrito.png' %}" alt="Carrito vacío" style="width:64px;opacity:.4">
-        <h4 class="mt-3 text-white">Tu carrito está vacío</h4>
-        <p class="text-white">Explora el catálogo y añade vehículos que te interesen.</p>
+        <img src="{% static 'img/carrito.png' %}" alt="{% if idioma == 'en' %}Empty cart{% else %}Carrito vacío{% endif %}" style="width:64px;opacity:.4">
+        <h4 class="mt-3 text-white">
+            {% if idioma == 'en' %}Your cart is empty{% else %}Tu carrito está vacío{% endif %}
+        </h4>
+        <p class="text-white">
+            {% if idioma == 'en' %}Explore the catalog and add vehicles you like.{% else %}Explora el catálogo y añade vehículos que te interesen.{% endif %}
+        </p>
         <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary mt-3">
-            Ver vehículos disponibles
+            {% if idioma == 'en' %}View available vehicles{% else %}Ver vehículos disponibles{% endif %}
         </a>
     </div>
 
@@ -40,8 +46,6 @@
             {% for v in vehiculos %}
             <div class="carrito-item card shadow-sm mb-3">
                 <div class="row g-0 align-items-center">
-
-                    <!-- Imagen -->
                     <div class="col-4 col-md-3">
                         {% if v.imagen %}
                             <img src="{{ v.imagen.url }}"
@@ -51,12 +55,10 @@
                         {% else %}
                             <img src="{% static 'img/default-car.jpg' %}"
                                  class="img-fluid rounded-start w-100 object-fit-cover"
-                                 alt="Sin imagen"
+                                 alt="{% if idioma == 'en' %}No image{% else %}Sin imagen{% endif %}"
                                  style="max-height:130px; min-height:100px">
                         {% endif %}
                     </div>
-
-                    <!-- Datos -->
                     <div class="col-8 col-md-9">
                         <div class="card-body d-flex justify-content-between align-items-start flex-wrap gap-2">
                             <div>
@@ -72,12 +74,10 @@
                                     <span class="text-muted small fw-normal">COP</span>
                                 </p>
                             </div>
-
-                            <!-- Botón quitar -->
                             <form method="post" action="{% url 'eliminar_carrito' v.pk %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Quitar del carrito">
-                                    ✕ Quitar
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="{% if idioma == 'en' %}Remove from cart{% else %}Quitar del carrito{% endif %}">
+                                    ✕ {% if idioma == 'en' %}Remove{% else %}Quitar{% endif %}
                                 </button>
                             </form>
                         </div>
@@ -90,31 +90,35 @@
         <!-- Panel resumen -->
         <div class="col-lg-4">
             <div class="carrito-resumen card shadow-sm p-4">
-                <h5 class="mb-3 border-bottom pb-2">Resumen del pedido</h5>
-
+                <h5 class="mb-3 border-bottom pb-2">
+                    {% if idioma == 'en' %}Order summary{% else %}Resumen del pedido{% endif %}
+                </h5>
                 <div class="d-flex justify-content-between mb-2 text-muted small">
-                    <span>Cantidad de vehículos</span>
+                    <span>{% if idioma == 'en' %}Number of vehicles{% else %}Cantidad de vehículos{% endif %}</span>
                     <span>{{ vehiculos|length }}</span>
                 </div>
-
                 <div class="d-flex justify-content-between mb-3">
-                    <strong>Total a pagar</strong>
+                    <strong>{% if idioma == 'en' %}Total to pay{% else %}Total a pagar{% endif %}</strong>
                     <strong class="price-total">${{ total|cop_enteros }} COP</strong>
                 </div>
 
                 <form method="post" action="{% url 'confirmar_compra' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-success w-100 btn-lg mb-2">
-                        ✔ Confirmar compra
+                        ✔ {% if idioma == 'en' %}Confirm purchase{% else %}Confirmar compra{% endif %}
                     </button>
                 </form>
 
                 <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary w-100">
-                    ← Seguir explorando
+                    {% if idioma == 'en' %}← Keep browsing{% else %}← Seguir explorando{% endif %}
                 </a>
 
                 <p class="text-muted small text-center mt-3 mb-0">
-                    Al confirmar, los vehículos quedarán registrados a tu nombre.
+                    {% if idioma == 'en' %}
+                        By confirming, the vehicles will be registered in your name.
+                    {% else %}
+                        Al confirmar, los vehículos quedarán registrados a tu nombre.
+                    {% endif %}
                 </p>
             </div>
         </div>

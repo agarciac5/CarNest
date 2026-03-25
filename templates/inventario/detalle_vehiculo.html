@@ -8,27 +8,44 @@
 <link href="{% static 'css/inventario.css' %}" rel="stylesheet">
 
 <div class="inv-detail-page">
+
     <div class="inv-detail-topnav d-flex flex-wrap align-items-center gap-2 mb-4">
-        <a href="/" class="inv-detail-link-btn">Inicio</a>
-        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn">Vehículos</a>
-        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn inv-detail-link-btn--accent">Volver al catálogo</a>
+        <a href="/" class="inv-detail-link-btn">
+            {% if idioma == 'en' %}Home{% else %}Inicio{% endif %}
+        </a>
+        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn">
+            {% if idioma == 'en' %}Vehicles{% else %}Vehículos{% endif %}
+        </a>
+        <a href="{% url 'lista_vehiculos' %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="inv-detail-link-btn inv-detail-link-btn--accent">
+            {% if idioma == 'en' %}Back to catalog{% else %}Volver al catálogo{% endif %}
+        </a>
         <div class="ms-lg-auto d-flex flex-wrap gap-2">
             {% if prev_id %}
-                <a class="inv-detail-link-btn inv-detail-link-btn--nav" href="{% url 'detalle_vehiculo' prev_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">Anterior</a>
+                <a class="inv-detail-link-btn inv-detail-link-btn--nav"
+                   href="{% url 'detalle_vehiculo' prev_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">
+                    {% if idioma == 'en' %}Previous{% else %}Anterior{% endif %}
+                </a>
             {% else %}
-                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">Anterior</span>
+                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">
+                    {% if idioma == 'en' %}Previous{% else %}Anterior{% endif %}
+                </span>
             {% endif %}
             {% if next_id %}
-                <a class="inv-detail-link-btn inv-detail-link-btn--nav" href="{% url 'detalle_vehiculo' next_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">Siguiente</a>
+                <a class="inv-detail-link-btn inv-detail-link-btn--nav"
+                   href="{% url 'detalle_vehiculo' next_id %}{% if q %}?q={{ q|urlencode }}{% endif %}">
+                    {% if idioma == 'en' %}Next{% else %}Siguiente{% endif %}
+                </a>
             {% else %}
-                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">Siguiente</span>
+                <span class="inv-detail-link-btn inv-detail-link-btn--nav inv-detail-link-btn--disabled">
+                    {% if idioma == 'en' %}Next{% else %}Siguiente{% endif %}
+                </span>
             {% endif %}
         </div>
     </div>
 
     <div class="row g-4 inv-detail-grid">
 
-        <!-- ── Columna izquierda: carrusel de fotos ── -->
+        <!-- ── Columna izquierda: carrusel ── -->
         <div class="col-lg-7">
             <div class="inv-detail-hero shadow-sm">
                 {% with extras=vehiculo.fotos_extra.all %}
@@ -37,94 +54,129 @@
                         <div class="carousel-inner">
                             {% if vehiculo.imagen %}
                                 <div class="carousel-item active">
-                                    <img src="{{ vehiculo.imagen.url }}" class="d-block w-100" alt="{{ vehiculo.marca }} {{ vehiculo.modelo }}">
+                                    <img src="{{ vehiculo.imagen.url }}" class="d-block w-100"
+                                         alt="{{ vehiculo.marca }} {{ vehiculo.modelo }}">
                                 </div>
                             {% endif %}
                             {% for f in extras %}
                                 <div class="carousel-item {% if not vehiculo.imagen and forloop.first %}active{% endif %}">
-                                    <img src="{{ f.imagen.url }}" class="d-block w-100" alt="Foto {{ forloop.counter }}">
+                                    <img src="{{ f.imagen.url }}" class="d-block w-100"
+                                         alt="{% if idioma == 'en' %}Photo{% else %}Foto{% endif %} {{ forloop.counter }}">
                                 </div>
                             {% endfor %}
                         </div>
                         {% if vehiculo.imagen and extras or not vehiculo.imagen and extras|length > 1 %}
-                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselVehiculo" data-bs-slide="prev">
+                            <button class="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselVehiculo" data-bs-slide="prev">
                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Anterior</span>
+                                <span class="visually-hidden">
+                                    {% if idioma == 'en' %}Previous{% else %}Anterior{% endif %}
+                                </span>
                             </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#carouselVehiculo" data-bs-slide="next">
+                            <button class="carousel-control-next" type="button"
+                                    data-bs-target="#carouselVehiculo" data-bs-slide="next">
                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Siguiente</span>
+                                <span class="visually-hidden">
+                                    {% if idioma == 'en' %}Next{% else %}Siguiente{% endif %}
+                                </span>
                             </button>
                         {% endif %}
                     </div>
                 {% else %}
                     <div class="ratio ratio-16x9 bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center inv-detail-no-photo">
-                        <span>Sin fotos</span>
+                        <span>{% if idioma == 'en' %}No photos{% else %}Sin fotos{% endif %}</span>
                     </div>
                 {% endif %}
                 {% endwith %}
             </div>
         </div>
 
-        <!-- ── Columna derecha: info + botón carrito ── -->
+        <!-- ── Columna derecha: info + precios + carrito ── -->
         <div class="col-lg-5">
             <div class="inv-detail-info">
+
                 <h1 class="inv-detail-title">{{ vehiculo.marca }} {{ vehiculo.modelo }}</h1>
 
-                <p class="inv-detail-price mb-4">
-                    <span class="inv-detail-price-label">Precio</span>
+                <!-- Precio COP -->
+                <p class="inv-detail-price mb-1">
+                    <span class="inv-detail-price-label">
+                        {% if idioma == 'en' %}Price{% else %}Precio{% endif %}
+                    </span>
                     <span class="inv-detail-price-line d-block mt-2">
-                        <span class="inv-detail-price-symbol">$</span><span class="inv-detail-price-digits">{{ vehiculo.precio|cop_enteros }}</span>
+                        <span class="inv-detail-price-symbol">$</span>
+                        <span class="inv-detail-price-digits">{{ vehiculo.precio|cop_enteros }}</span>
                         <span class="inv-detail-price-currency">COP</span>
                     </span>
                 </p>
 
+                <!-- Precio USD — solo en inglés y si la API respondió -->
+                {% if idioma == 'en' and precio_usd %}
+                    <p class="precio-usd mb-3">
+                        ≈ <strong>${{ precio_usd|floatformat:0 }}</strong> USD
+                        <span class="precio-usd-note">(live exchange rate)</span>
+                    </p>
+                {% endif %}
+
+                <!-- Especificaciones -->
                 <dl class="row inv-specs inv-specs--detail mb-0">
-                    <dt class="col-5">Año</dt>
+                    <dt class="col-5">{% if idioma == 'en' %}Year{% else %}Año{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.año }}</dd>
-                    <dt class="col-5">Kilometraje</dt>
+
+                    <dt class="col-5">{% if idioma == 'en' %}Mileage{% else %}Kilometraje{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.kilometraje|cop_enteros }} km</dd>
-                    <dt class="col-5">Color</dt>
+
+                    <dt class="col-5">{% if idioma == 'en' %}Color{% else %}Color{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.color|default:"—" }}</dd>
-                    <dt class="col-5">Combustible</dt>
+
+                    <dt class="col-5">{% if idioma == 'en' %}Fuel{% else %}Combustible{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.get_combustible_display }}</dd>
-                    <dt class="col-5">Transmisión</dt>
+
+                    <dt class="col-5">{% if idioma == 'en' %}Transmission{% else %}Transmisión{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.get_transmision_display }}</dd>
-                    <dt class="col-5">Publicado</dt>
+
+                    <dt class="col-5">{% if idioma == 'en' %}Listed{% else %}Publicado{% endif %}</dt>
                     <dd class="col-7">{{ vehiculo.fecha_publicacion|date:"d M Y" }}</dd>
                 </dl>
 
-                <!-- ── AÑADIDO: Botón agregar al carrito ──────────── -->
+                <!-- Botón carrito -->
                 <div class="inv-detail-carrito mt-4">
                     {% if user.is_authenticated %}
                         <form method="post" action="{% url 'agregar_carrito' vehiculo.pk %}">
                             {% csrf_token %}
-                            {# Volver a esta misma página después de agregar #}
-                            <input type="hidden" name="next" value="{{ request.path }}{% if q %}?q={{ q|urlencode }}{% endif %}">
+                            <input type="hidden" name="next"
+                                   value="{{ request.path }}{% if q %}?q={{ q|urlencode }}{% endif %}">
                             <button type="submit" class="btn btn-primary btn-lg w-100 inv-btn-carrito">
-                                🛒 Agregar al carrito
+                                🛒 {% if idioma == 'en' %}Add to cart{% else %}Agregar al carrito{% endif %}
                             </button>
                         </form>
                         <a href="{% url 'ver_carrito' %}" class="btn btn-outline-light w-100 mt-2">
-                            Ver mi carrito
+                            {% if idioma == 'en' %}View my cart{% else %}Ver mi carrito{% endif %}
                         </a>
                     {% else %}
                         <a href="{% url 'login' %}?next={{ request.path }}"
                            class="btn btn-outline-light btn-lg w-100">
-                            Inicia sesión para comprar
+                            {% if idioma == 'en' %}Log in to purchase{% else %}Inicia sesión para comprar{% endif %}
                         </a>
                         <p class="text-muted small text-center mt-2 mb-0">
-                            ¿No tienes cuenta?
-                            <a href="{% url 'registro' %}" class="text-info">Regístrate gratis</a>
+                            {% if idioma == 'en' %}
+                                No account?
+                                <a href="{% url 'registro' %}" class="text-info">Register for free</a>
+                            {% else %}
+                                ¿No tienes cuenta?
+                                <a href="{% url 'registro' %}" class="text-info">Regístrate gratis</a>
+                            {% endif %}
                         </p>
                     {% endif %}
                 </div>
-                <!-- ── FIN botón carrito ───────────────────────────── -->
 
+                <!-- Descripción -->
                 {% if vehiculo.descripcion %}
-                    <h2 class="inv-detail-section-title mt-4">Descripción</h2>
+                    <h2 class="inv-detail-section-title mt-4">
+                        {% if idioma == 'en' %}Description{% else %}Descripción{% endif %}
+                    </h2>
                     <div class="inv-detail-desc">{{ vehiculo.descripcion|linebreaks }}</div>
                 {% endif %}
+
             </div>
         </div>
 

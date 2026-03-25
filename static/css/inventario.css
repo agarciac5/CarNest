@@ -253,3 +253,21 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
 }
+
+/* ── Precio equivalente en USD ─────────────────────────────────── */
+.precio-usd {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.precio-usd strong {
+    color: #4ade80;
+    font-weight: 600;
+}
+
+.precio-usd-note {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-left: 4px;
+}
