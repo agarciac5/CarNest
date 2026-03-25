@@ -49,9 +49,6 @@ def detalle_vehiculo(request, pk):
         except ValueError:
             pass
 
-    # ── Conversión COP → USD ────────────────────────────────────────
-    # Solo consulta la API si el usuario eligió inglés, para no hacer
-    # llamadas innecesarias cuando se usa en español.
     precio_usd = None
     if request.session.get('idioma') == 'en':
         try:
@@ -62,8 +59,7 @@ def detalle_vehiculo(request, pk):
             if tasa:
                 precio_usd = round(float(vehiculo.precio) * tasa, 2)
         except Exception:
-            precio_usd = None  # Si falla la API, no se muestra, sin romper nada
-    # ───────────────────────────────────────────────────────────────
+            precio_usd = None
 
     return render(request, 'inventario/detalle_vehiculo.html', {
         'vehiculo': vehiculo,
@@ -77,6 +73,14 @@ def detalle_vehiculo(request, pk):
 @login_required
 def crear_vehiculo(request):
     if request.method == 'POST':
+
+        # ── LÓGICA CLAVE: superuser → en_venta, usuario normal → posteado ──
+        if request.user.is_superuser:
+            estado_inicial = 'en_venta'
+        else:
+            estado_inicial = 'posteado'
+        # ────────────────────────────────────────────────────────────────────
+
         v = Vehiculo.objects.create(
             marca=request.POST['marca'].strip(),
             modelo=request.POST['modelo'].strip(),
@@ -88,7 +92,7 @@ def crear_vehiculo(request):
             transmision=request.POST.get('transmision', 'manual'),
             descripcion=request.POST.get('descripcion', '').strip(),
             propietario=request.user,
-            estado='en_venta',
+            estado=estado_inicial,
         )
         if request.FILES.get('imagen'):
             v.imagen = request.FILES['imagen']
@@ -97,6 +101,20 @@ def crear_vehiculo(request):
         for orden, f in enumerate(fotos):
             if f:
                 FotoVehiculo.objects.create(vehiculo=v, imagen=f, orden=orden)
-        return redirect('detalle_vehiculo', pk=v.pk)
+
+        # ── Redirigir según quién publicó ───────────────────────────────────
+        if request.user.is_superuser:
+            return redirect('detalle_vehiculo', pk=v.pk)  # va al inventario
+        else:
+            return redirect('aviso_publicacion')           # va a página de aviso
+        # ────────────────────────────────────────────────────────────────────
 
     return render(request, 'inventario/crear_vehiculo.html')
+
+
+def aviso_publicacion(request):
+    """
+    Página que se muestra al usuario normal tras publicar su vehículo.
+    Le informa que su anuncio está pendiente de revisión por el equipo.
+    """
+    return render(request, 'inventario/aviso_publicacion.html')

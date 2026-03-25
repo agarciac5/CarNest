@@ -1,48 +1,125 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load cop_format %}
 
-{% block title %}Anuncios{% endblock %}
+{% block title %}{% if idioma == 'en' %}Vehicle listings{% else %}Anuncios{% endif %}{% endblock %}
 
 {% block content %}
 
-<h2 class="mb-4 text-white">Anuncios de vehículos</h2>
+{% if messages %}
+    {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
 
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+    <div>
+        <h2 class="mb-1 text-white">
+            {% if idioma == 'en' %}Vehicle listings{% else %}Anuncios de vehículos{% endif %}
+        </h2>
+        <p class="text-muted mb-0 small">
+            {% if idioma == 'en' %}
+                Vehicles posted by users pending your review.
+            {% else %}
+                Vehículos publicados por usuarios pendientes de revisión.
+            {% endif %}
+        </p>
+    </div>
 
+    <form method="get" action="{% url 'anuncios' %}" class="d-flex gap-2">
+        <input type="search" name="q" value="{{ q }}"
+               class="form-control form-control-sm"
+               placeholder="{% if idioma == 'en' %}Search by brand, model or user…{% else %}Buscar por marca, modelo o usuario…{% endif %}"
+               style="min-width:240px">
+        <button class="btn btn-outline-light btn-sm" type="submit">
+            {% if idioma == 'en' %}Search{% else %}Buscar{% endif %}
+        </button>
+        {% if q %}
+            <a href="{% url 'anuncios' %}" class="btn btn-outline-secondary btn-sm">✕</a>
+        {% endif %}
+    </form>
+</div>
 
-<div class="row">
-
+<div class="row g-4">
     {% for vehiculo in vehiculos %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
+        <div class="col-md-6 col-xl-4">
+            <div class="card h-100 shadow-sm"
+                 style="background:#1e293b; border:1px solid #334155; color:#f1f5f9;">
 
                 {% if vehiculo.imagen %}
-                    <img src="{{ vehiculo.imagen.url }}" class="card-img-top">
+                    <img src="{{ vehiculo.imagen.url }}" class="card-img-top"
+                         style="height:200px; object-fit:cover;">
                 {% else %}
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top">
+                    <img src="{% static 'img/default-car.jpg' %}" class="card-img-top"
+                         style="height:200px; object-fit:cover;">
                 {% endif %}
 
                 <div class="card-body">
-                    <h5 class="card-title">
-                        {{ vehiculo.marca }} {{ vehiculo.modelo }}
-                    </h5>
-
-                    <p class="card-text">
-                        Año: {{ vehiculo.año }}
+                    <h5 class="card-title mb-1">{{ vehiculo.marca }} {{ vehiculo.modelo }}</h5>
+                    <p class="text-white small mb-1">
+                        {{ vehiculo.año }} · {{ vehiculo.get_combustible_display }} · {{ vehiculo.get_transmision_display }}
                     </p>
-
-                    <h4>${{ vehiculo.precio }}</h4>
+                    {% if vehiculo.kilometraje %}
+                        <p class="text-muted small mb-2">{{ vehiculo.kilometraje|cop_enteros }} km</p>
+                    {% endif %}
+                    <p class="mb-1" style="font-size:1.15rem; font-weight:700; color:#2563eb;">
+                        ${{ vehiculo.precio|cop_enteros }}
+                        <span class="text-muted small fw-normal">COP</span>
+                    </p>
+                    <p class="text-white small mb-0">
+                        {% if idioma == 'en' %}Posted by{% else %}Publicado por{% endif %}:
+                        <strong>{{ vehiculo.propietario.username }}</strong>
+                    </p>
+                    <p class="text-white small mb-0">
+                        {{ vehiculo.fecha_publicacion|date:"d/m/Y H:i" }}
+                    </p>
                 </div>
 
-                <div class="card-footer text-center">
-                    <a href="{% url 'comprar_vehiculo' vehiculo.id %}" class="btn btn-dark btn-sm">
-                        Comprar para la concesionaria
-                    </a>
-                </div>
+                <div class="card-footer d-flex gap-2"
+                     style="background:#0f172a; border-top:1px solid #334155;">
 
+                    <form method="post" action="{% url 'comprar_vehiculo' vehiculo.id %}"
+                          class="flex-fill"
+                          onsubmit="return confirm('{% if idioma == 'en' %}Purchase this vehicle and add it to inventory?{% else %}¿Comprar este vehículo y añadirlo al inventario?{% endif %}')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-sm w-100">
+                            {% if idioma == 'en' %}✔ Buy{% else %}✔ Comprar{% endif %}
+                        </button>
+                    </form>
+
+                    {% if request.user.is_superuser %}
+                    <form method="post" action="{% url 'rechazar_vehiculo' vehiculo.id %}"
+                          class="flex-fill"
+                          onsubmit="return confirm('{% if idioma == 'en' %}Reject and delete this listing?{% else %}¿Rechazar y eliminar este anuncio?{% endif %}')">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                            {% if idioma == 'en' %}✕ Reject{% else %}✕ Rechazar{% endif %}
+                        </button>
+                    </form>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-light border text-center py-5">
+                <h5 class="text-muted mb-2">
+                    {% if idioma == 'en' %}No pending listings{% else %}No hay anuncios pendientes{% endif %}
+                </h5>
+                <p class="text-muted small mb-0">
+                    {% if idioma == 'en' %}
+                        When users publish vehicles they will appear here for your review.
+                    {% else %}
+                        Cuando los usuarios publiquen vehículos aparecerán aquí para tu revisión.
+                    {% endif %}
+                </p>
             </div>
         </div>
     {% endfor %}
-
 </div>
 
 {% endblock %}

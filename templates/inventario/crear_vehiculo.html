@@ -1,83 +1,149 @@
 {% extends 'base.html' %}
 
-{% block title %}Publicar vehículo{% endblock %}
+{% block title %}
+    {% if idioma == 'en' %}Publish vehicle{% else %}Publicar vehículo{% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <nav aria-label="breadcrumb" class="mb-3">
             <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item"><a href="{% url 'lista_vehiculos' %}">Vehículos</a></li>
-                <li class="breadcrumb-item active text-white" aria-current="page">Publicar</li>
+                <li class="breadcrumb-item">
+                    <a href="{% url 'lista_vehiculos' %}">
+                        {% if idioma == 'en' %}Vehicles{% else %}Vehículos{% endif %}
+                    </a>
+                </li>
+                <li class="breadcrumb-item active text-white" aria-current="page">
+                    {% if idioma == 'en' %}Publish{% else %}Publicar{% endif %}
+                </li>
             </ol>
         </nav>
-        <h1 class="h3 mb-4 text-white">Publicar vehículo</h1>
-        <p class="text-white small">La publicación aparecerá en el catálogo como <strong>En venta</strong>. Puedes subir una foto principal y varias adicionales.</p>
+
+        <h1 class="h3 mb-4 text-white">
+            {% if idioma == 'en' %}Publish vehicle{% else %}Publicar vehículo{% endif %}
+        </h1>
+
+        {% if request.user.is_superuser %}
+            <p class="text-white small">
+                {% if idioma == 'en' %}
+                    The listing will appear directly in the catalog as <strong>For sale</strong>. You can upload a main photo and several additional ones.
+                {% else %}
+                    La publicación aparecerá directamente en el catálogo como <strong>En venta</strong>. Puedes subir una foto principal y varias adicionales.
+                {% endif %}
+            </p>
+        {% else %}
+            <p class="text-white small">
+                {% if idioma == 'en' %}
+                    Your vehicle will be sent for review. Once approved by our team it will appear in the catalog.
+                {% else %}
+                    Tu vehículo será enviado a revisión. Una vez aprobado por nuestro equipo aparecerá en el catálogo.
+                {% endif %}
+            </p>
+        {% endif %}
 
         <form method="post" enctype="multipart/form-data" class="card border-0 shadow-sm">
             {% csrf_token %}
             <div class="card-body p-4">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label" for="marca">Marca</label>
+                        <label class="form-label" for="marca">
+                            {% if idioma == 'en' %}Brand{% else %}Marca{% endif %}
+                        </label>
                         <input type="text" name="marca" id="marca" class="form-control" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="modelo">Modelo</label>
+                        <label class="form-label" for="modelo">
+                            {% if idioma == 'en' %}Model{% else %}Modelo{% endif %}
+                        </label>
                         <input type="text" name="modelo" id="modelo" class="form-control" required>
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label" for="año">Año</label>
+                        <label class="form-label" for="año">
+                            {% if idioma == 'en' %}Year{% else %}Año{% endif %}
+                        </label>
                         <input type="number" name="año" id="año" class="form-control" required min="1980" max="2035">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label" for="precio">Precio</label>
+                        <label class="form-label" for="precio">
+                            {% if idioma == 'en' %}Price{% else %}Precio{% endif %}
+                        </label>
                         <input type="number" name="precio" id="precio" class="form-control" required min="0" step="0.01">
                     </div>
                     <div class="col-md-4">
-                        <label class="form-label" for="kilometraje">Kilometraje</label>
+                        <label class="form-label" for="kilometraje">
+                            {% if idioma == 'en' %}Mileage{% else %}Kilometraje{% endif %}
+                        </label>
                         <input type="number" name="kilometraje" id="kilometraje" class="form-control" value="0" min="0">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label" for="color">Color</label>
-                        <input type="text" name="color" id="color" class="form-control" placeholder="Ej. Blanco perla">
+                        <label class="form-label" for="color">
+                            {% if idioma == 'en' %}Color{% else %}Color{% endif %}
+                        </label>
+                        <input type="text" name="color" id="color" class="form-control"
+                               placeholder="{% if idioma == 'en' %}E.g. Pearl white{% else %}Ej. Blanco perla{% endif %}">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label" for="combustible">Combustible</label>
+                        <label class="form-label" for="combustible">
+                            {% if idioma == 'en' %}Fuel{% else %}Combustible{% endif %}
+                        </label>
                         <select name="combustible" id="combustible" class="form-select">
-                            <option value="gasolina">Gasolina</option>
-                            <option value="diesel">Diésel</option>
-                            <option value="hibrido">Híbrido</option>
-                            <option value="electrico">Eléctrico</option>
+                            <option value="gasolina">{% if idioma == 'en' %}Gasoline{% else %}Gasolina{% endif %}</option>
+                            <option value="diesel">{% if idioma == 'en' %}Diesel{% else %}Diésel{% endif %}</option>
+                            <option value="hibrido">{% if idioma == 'en' %}Hybrid{% else %}Híbrido{% endif %}</option>
+                            <option value="electrico">{% if idioma == 'en' %}Electric{% else %}Eléctrico{% endif %}</option>
                             <option value="glp">GLP</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label" for="transmision">Transmisión</label>
+                        <label class="form-label" for="transmision">
+                            {% if idioma == 'en' %}Transmission{% else %}Transmisión{% endif %}
+                        </label>
                         <select name="transmision" id="transmision" class="form-select">
-                            <option value="manual">Manual</option>
-                            <option value="automatica">Automática</option>
+                            <option value="manual">{% if idioma == 'en' %}Manual{% else %}Manual{% endif %}</option>
+                            <option value="automatica">{% if idioma == 'en' %}Automatic{% else %}Automática{% endif %}</option>
                             <option value="cvt">CVT</option>
                         </select>
                     </div>
                     <div class="col-12">
-                        <label class="form-label" for="descripcion">Descripción</label>
-                        <textarea name="descripcion" id="descripcion" class="form-control" rows="4" placeholder="Historial, equipamiento, estado general…"></textarea>
+                        <label class="form-label" for="descripcion">
+                            {% if idioma == 'en' %}Description{% else %}Descripción{% endif %}
+                        </label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="4"
+                                  placeholder="{% if idioma == 'en' %}History, equipment, general condition…{% else %}Historial, equipamiento, estado general…{% endif %}"></textarea>
                     </div>
                     <div class="col-12">
-                        <label class="form-label" for="imagen">Foto principal</label>
+                        <label class="form-label" for="imagen">
+                            {% if idioma == 'en' %}Main photo{% else %}Foto principal{% endif %}
+                        </label>
                         <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
                     </div>
                     <div class="col-12">
-                        <label class="form-label" for="fotos_extra">Fotos adicionales (galería)</label>
+                        <label class="form-label" for="fotos_extra">
+                            {% if idioma == 'en' %}Additional photos (gallery){% else %}Fotos adicionales (galería){% endif %}
+                        </label>
                         <input type="file" name="fotos_extra" id="fotos_extra" class="form-control" accept="image/*" multiple>
-                        <div class="form-text">Puedes seleccionar varias imágenes a la vez.</div>
+                        <div class="form-text">
+                            {% if idioma == 'en' %}You can select multiple images at once.{% else %}Puedes seleccionar varias imágenes a la vez.{% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
+
             <div class="card-footer bg-light d-flex gap-2 justify-content-between flex-wrap">
-                <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary">Cancelar</a>
-                <button type="submit" class="btn btn-success">Publicar en inventario</button>
+                <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary">
+                    {% if idioma == 'en' %}Cancel{% else %}Cancelar{% endif %}
+                </a>
+
+                {% if request.user.is_superuser %}
+                    <button type="submit" class="btn btn-success">
+                        {% if idioma == 'en' %}Publish in inventory{% else %}Publicar en inventario{% endif %}
+                    </button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">
+                        {% if idioma == 'en' %}Submit for review{% else %}Enviar a revisión{% endif %}
+                    </button>
+                {% endif %}
             </div>
         </form>
     </div>
