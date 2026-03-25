@@ -1,16 +1,20 @@
 {% extends 'auth_base.html' %}
 
-{% block title %}Registro — CarNest{% endblock %}
+{% block title %}{% if idioma == 'en' %}Register — CarNest{% else %}Registro — CarNest{% endif %}{% endblock %}
 
 {% block auth_nav_extra %}
-    <a href="{% url 'login' %}" class="btn btn-outline-light">Ya tengo cuenta</a>
+    <a href="{% url 'login' %}" class="btn btn-outline-light">
+        {% if idioma == 'en' %}I already have an account{% else %}Ya tengo cuenta{% endif %}
+    </a>
 {% endblock %}
 
 {% block content %}
 <div class="card auth-card shadow-lg">
     <div class="card-body">
-        <h2 class="h4 mb-1">Crear cuenta</h2>
-        <p class="text-secondary small mb-4">Únete a CarNest para comprar y vender vehículos.</p>
+        <h2 class="h4 mb-1">{% if idioma == 'en' %}Create account{% else %}Crear cuenta{% endif %}</h2>
+        <p class="text-secondary small mb-4">
+            {% if idioma == 'en' %}Join CarNest to buy and sell vehicles.{% else %}Únete a CarNest para comprar y vender vehículos.{% endif %}
+        </p>
 
         {% if messages %}
             {% for message in messages %}
@@ -24,30 +28,52 @@
         <form method="post" action="{% url 'registro' %}">
             {% csrf_token %}
             <div class="mb-3">
-                <label class="form-label" for="id_username">Usuario</label>
-                <input type="text" name="username" id="id_username" class="form-control{% if form.username.errors %} is-invalid{% endif %}" value="{{ form.username.value|default:'' }}" required autocomplete="username">
+                <label class="form-label" for="id_username">
+                    {% if idioma == 'en' %}Username{% else %}Usuario{% endif %}
+                </label>
+                <input type="text" name="username" id="id_username"
+                       class="form-control{% if form.username.errors %} is-invalid{% endif %}"
+                       value="{{ form.username.value|default:'' }}" required autocomplete="username">
                 {% for err in form.username.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
             </div>
             <div class="mb-3">
-                <label class="form-label" for="id_email">Correo</label>
-                <input type="email" name="email" id="id_email" class="form-control{% if form.email.errors %} is-invalid{% endif %}" value="{{ form.email.value|default:'' }}" required autocomplete="email">
+                <label class="form-label" for="id_email">
+                    {% if idioma == 'en' %}Email{% else %}Correo{% endif %}
+                </label>
+                <input type="email" name="email" id="id_email"
+                       class="form-control{% if form.email.errors %} is-invalid{% endif %}"
+                       value="{{ form.email.value|default:'' }}" required autocomplete="email">
                 {% for err in form.email.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
             </div>
             <div class="mb-3">
-                <label class="form-label" for="id_password1">Contraseña</label>
-                <input type="password" name="password1" id="id_password1" class="form-control{% if form.password1.errors %} is-invalid{% endif %}" required autocomplete="new-password">
+                <label class="form-label" for="id_password1">
+                    {% if idioma == 'en' %}Password{% else %}Contraseña{% endif %}
+                </label>
+                <input type="password" name="password1" id="id_password1"
+                       class="form-control{% if form.password1.errors %} is-invalid{% endif %}"
+                       required autocomplete="new-password">
                 {% for err in form.password1.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
             </div>
             <div class="mb-3">
-                <label class="form-label" for="id_password2">Confirmar contraseña</label>
-                <input type="password" name="password2" id="id_password2" class="form-control{% if form.password2.errors %} is-invalid{% endif %}" required autocomplete="new-password">
+                <label class="form-label" for="id_password2">
+                    {% if idioma == 'en' %}Confirm password{% else %}Confirmar contraseña{% endif %}
+                </label>
+                <input type="password" name="password2" id="id_password2"
+                       class="form-control{% if form.password2.errors %} is-invalid{% endif %}"
+                       required autocomplete="new-password">
                 {% for err in form.password2.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
             </div>
-            <button type="submit" class="btn btn-success w-100 py-2">Registrarse</button>
+            <button type="submit" class="btn btn-success w-100 py-2">
+                {% if idioma == 'en' %}Register{% else %}Registrarse{% endif %}
+            </button>
         </form>
 
         <p class="text-center small mt-4 mb-0 auth-links">
-            ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+            {% if idioma == 'en' %}
+                Already have an account? <a href="{% url 'login' %}">Log in</a>
+            {% else %}
+                ¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a>
+            {% endif %}
         </p>
     </div>
 </div>

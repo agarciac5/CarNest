@@ -24,9 +24,13 @@ def carnest_branding(request):
 
     # ── AÑADIDO: contador del carrito ──────────────────────────────
     carrito_count = len(request.session.get('carrito', []))
+    idioma = request.session.get('idioma', None)   # None = no elegido aún
+    mostrar_selector = idioma is None
     # ───────────────────────────────────────────────────────────────
 
     return {
         'carnest_logo_url': logo_url,
-        'carrito_count': carrito_count,  # ← disponible en todos los templates
+        'carrito_count': carrito_count,
+        'idioma': idioma,
+        'mostrar_selector': mostrar_selector,  # ← disponible en todos los templates
     }

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if idioma == 'en' %}Listing submitted — CarNest{% else %}Anuncio enviado — CarNest{% endif %}{% endblock %}
+
+{% block content %}
+
+<div class="text-center py-5">
+    <div style="font-size:4rem;">📋</div>
+    <h2 class="text-white mt-3">
+        {% if idioma == 'en' %}Your listing has been submitted!{% else %}¡Tu anuncio fue enviado!{% endif %}
+    </h2>
+    <p class="text-white mt-2" style="max-width:480px; margin:0 auto;">
+        {% if idioma == 'en' %}
+            Our team will review your vehicle and add it to the inventory if it meets our standards.
+            You will be able to see it in the catalog once it is approved.
+        {% else %}
+            Nuestro equipo revisará tu vehículo y lo incorporará al inventario si cumple con nuestros estándares.
+            Podrás verlo en el catálogo una vez sea aprobado.
+        {% endif %}
+    </p>
+    <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary">
+            {% if idioma == 'en' %}Browse catalog{% else %}Ver catálogo{% endif %}
+        </a>
+        <a href="{% url 'crear_vehiculo' %}" class="btn btn-outline-light">
+            {% if idioma == 'en' %}Publish another vehicle{% else %}Publicar otro vehículo{% endif %}
+        </a>
+    </div>
+</div>
+
+{% endblock %}

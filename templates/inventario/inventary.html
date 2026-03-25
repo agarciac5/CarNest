@@ -3,7 +3,7 @@
 {% load humanize %}
 {% load cop_format %}
 
-{% block title %}Catálogo de vehículos{% endblock %}
+{% block title %}{% if idioma == 'en' %}Vehicle catalog{% else %}Catálogo de vehículos{% endif %}{% endblock %}
 
 {% block content %}
 <link href="{% static 'css/inventario.css' %}" rel="stylesheet">
@@ -11,14 +11,26 @@
 <div class="inv-hero">
     <div class="row align-items-center g-3">
         <div class="col-lg-7">
-            <h1 class="h3 mb-2">Catálogo de vehículos</h1>
-            <p class="mb-0 opacity-75">Explora modelos en venta, filtra por marca o modelo y abre la ficha para ver fotos y datos completos.</p>
+            <h1 class="h3 mb-2">
+                {% if idioma == 'en' %}Vehicle catalog{% else %}Catálogo de vehículos{% endif %}
+            </h1>
+            <p class="mb-0 opacity-75">
+                {% if idioma == 'en' %}
+                    Explore models for sale, filter by brand or model and open the listing to see full photos and details.
+                {% else %}
+                    Explora modelos en venta, filtra por marca o modelo y abre la ficha para ver fotos y datos completos.
+                {% endif %}
+            </p>
         </div>
         <div class="col-lg-5">
             <form class="inv-search" method="get" action="{% url 'lista_vehiculos' %}">
                 <div class="input-group shadow-sm">
-                    <input type="search" name="q" value="{{ q }}" class="form-control border-0" placeholder="Buscar por marca, modelo, año, color…" aria-label="Buscar vehículos">
-                    <button class="btn btn-light" type="submit">Buscar</button>
+                    <input type="search" name="q" value="{{ q }}" class="form-control border-0"
+                           placeholder="{% if idioma == 'en' %}Search by brand, model, year, color…{% else %}Buscar por marca, modelo, año, color…{% endif %}"
+                           aria-label="{% if idioma == 'en' %}Search vehicles{% else %}Buscar vehículos{% endif %}">
+                    <button class="btn btn-light" type="submit">
+                        {% if idioma == 'en' %}Search{% else %}Buscar{% endif %}
+                    </button>
                 </div>
             </form>
         </div>
@@ -26,10 +38,15 @@
 </div>
 
 {% if user.is_authenticated %}
-    <a href="{% url 'crear_vehiculo' %}" class="btn btn-primary mb-4">+ Publicar vehículo</a>
+    <a href="{% url 'crear_vehiculo' %}" class="btn btn-primary mb-4">
+        {% if idioma == 'en' %}+ Publish vehicle{% else %}+ Publicar vehículo{% endif %}
+    </a>
 {% else %}
     <p class="text-muted small mb-4">
-        <a href="{% url 'login' %}">Inicia sesión</a> para publicar un vehículo en el inventario.
+        <a href="{% url 'login' %}">
+            {% if idioma == 'en' %}Log in{% else %}Inicia sesión{% endif %}
+        </a>
+        {% if idioma == 'en' %}to publish a vehicle in the inventory.{% else %}para publicar un vehículo en el inventario.{% endif %}
     </p>
 {% endif %}
 
@@ -38,26 +55,24 @@
         <div class="col-md-6 col-xl-4">
             <article class="card inv-card h-100 shadow-sm">
                 <a href="{% url 'detalle_vehiculo' v.pk %}{% if q %}?q={{ q|urlencode }}{% endif %}" class="text-decoration-none text-dark">
-                    
-                    <div class="ratio ratio-16x9 bg-light">
 
+                    <div class="ratio ratio-16x9 bg-light">
                         {% if v.imagen %}
                             <img src="{{ v.imagen.url }}" alt="{{ v.marca }} {{ v.modelo }}" class="w-100 h-100 object-fit-cover" loading="lazy">
-
                         {% elif v.fotos_extra.first %}
                             <img src="{{ v.fotos_extra.first.imagen.url }}" alt="{{ v.marca }} {{ v.modelo }}" class="w-100 h-100 object-fit-cover" loading="lazy">
-
                         {% else %}
-                            <img src="{% static 'img/default-car.jpg' %}" alt="Sin imagen" class="w-100 h-100 object-fit-cover" loading="lazy">
+                            <img src="{% static 'img/default-car.jpg' %}" alt="{% if idioma == 'en' %}No image{% else %}Sin imagen{% endif %}" class="w-100 h-100 object-fit-cover" loading="lazy">
                         {% endif %}
-
                     </div>
 
                     <div class="card-body">
                         <h2 class="h5 card-title mb-1">{{ v.marca }} {{ v.modelo }}</h2>
                         <p class="text-muted small mb-2">{{ v.año }} · {{ v.get_combustible_display }} · {{ v.get_transmision_display }}</p>
                         <p class="price mb-2">${{ v.precio|cop_enteros }} <span class="text-muted small">COP</span></p>
-                        <span class="badge bg-success inv-badge">En venta</span>
+                        <span class="badge bg-success inv-badge">
+                            {% if idioma == 'en' %}For sale{% else %}En venta{% endif %}
+                        </span>
                         {% if v.kilometraje %}
                             <span class="badge bg-light text-dark border inv-badge ms-1">{{ v.kilometraje|cop_enteros }} km</span>
                         {% endif %}
@@ -69,9 +84,13 @@
         <div class="col-12">
             <div class="alert alert-light border">
                 {% if q %}
-                    No hay resultados para “{{ q }}”. <a href="{% url 'lista_vehiculos' %}">Ver todo el catálogo</a>.
+                    {% if idioma == 'en' %}
+                        No results for "{{ q }}". <a href="{% url 'lista_vehiculos' %}">View full catalog</a>.
+                    {% else %}
+                        No hay resultados para "{{ q }}". <a href="{% url 'lista_vehiculos' %}">Ver todo el catálogo</a>.
+                    {% endif %}
                 {% else %}
-                    No hay vehículos disponibles por ahora.
+                    {% if idioma == 'en' %}No vehicles available right now.{% else %}No hay vehículos disponibles por ahora.{% endif %}
                 {% endif %}
             </div>
         </div>
