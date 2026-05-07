@@ -1,32 +1,31 @@
 import os
 from django.conf import settings
+from django.utils import translation
 
 
 def carnest_branding(request):
-    """
-    Context processor global de CarNest.
-    Inyecta el logo y el conteo del carrito en todos los templates.
-    """
     logo_url = None
     logo_path_setting = getattr(settings, 'CARNEST_LOGO_PATH', '')
 
     if logo_path_setting:
-        # Ruta explícita configurada en settings
         logo_url = settings.MEDIA_URL + logo_path_setting
     else:
-        # Buscar automáticamente un archivo con 'gemini' en media/vehiculos/
         vehiculos_dir = os.path.join(settings.MEDIA_ROOT, 'vehiculos')
-        if os.path.isdir(vehiculos_dir):
-            for fname in os.listdir(vehiculos_dir):
+        if os.path.isdir(str(vehiculos_dir)):
+            for fname in os.listdir(str(vehiculos_dir)):
                 if 'gemini' in fname.lower():
                     logo_url = settings.MEDIA_URL + 'vehiculos/' + fname
                     break
 
-    # ── AÑADIDO: contador del carrito ──────────────────────────────
     carrito_count = len(request.session.get('carrito', []))
-    # ───────────────────────────────────────────────────────────────
+
+    # Leer idioma desde sesión (nuestro overlay) o desde Django i18n
+    idioma = request.session.get('idioma') or translation.get_language() or 'es'
+    mostrar_selector = 'idioma' not in request.session
 
     return {
         'carnest_logo_url': logo_url,
-        'carrito_count': carrito_count,  # ← disponible en todos los templates
+        'carrito_count': carrito_count,
+        'idioma': idioma,
+        'mostrar_selector': mostrar_selector,
     }

@@ -1,16 +1,17 @@
 {% extends 'auth_base.html' %}
+{% load i18n %}
 
-{% block title %}Iniciar sesión — CarNest{% endblock %}
+{% block title %}{% trans "Iniciar sesión" %} — CarNest{% endblock %}
 
 {% block auth_nav_extra %}
-    <a href="{% url 'registro' %}" class="btn btn-outline-light">Crear cuenta</a>
+    <a href="{% url 'registro' %}" class="btn btn-outline-light">{% trans "Crear cuenta" %}</a>
 {% endblock %}
 
 {% block content %}
 <div class="card auth-card shadow-lg">
     <div class="card-body">
-        <h2 class="h4 mb-1">Iniciar sesión</h2>
-        <p class="text-secondary small mb-4">Accede a tu cuenta para publicar y gestionar vehículos.</p>
+        <h2 class="h4 mb-1">{% trans "Iniciar sesión" %}</h2>
+        <p class="text-secondary small mb-4">{% trans "Accede a tu cuenta para publicar y gestionar vehículos." %}</p>
 
         {% if messages %}
             {% for message in messages %}
@@ -21,18 +22,18 @@
         <form method="post" action="{% url 'login' %}">
             {% csrf_token %}
             <div class="mb-3">
-                <label class="form-label" for="id_username">Usuario</label>
+                <label class="form-label" for="id_username">{% trans "Usuario" %}</label>
                 <input type="text" name="username" id="id_username" class="form-control" required autocomplete="username">
             </div>
             <div class="mb-3">
-                <label class="form-label" for="id_password">Contraseña</label>
+                <label class="form-label" for="id_password">{% trans "Contraseña" %}</label>
                 <input type="password" name="password" id="id_password" class="form-control" required autocomplete="current-password">
             </div>
-            <button type="submit" class="btn btn-primary w-100 py-2">Entrar</button>
+            <button type="submit" class="btn btn-primary w-100 py-2">{% trans "Entrar" %}</button>
         </form>
 
         <p class="text-center small mt-4 mb-0 auth-links">
-            ¿No tienes cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a>
+            {% trans "¿No tienes cuenta?" %} <a href="{% url 'registro' %}">{% trans "Regístrate aquí" %}</a>
         </p>
     </div>
 </div>

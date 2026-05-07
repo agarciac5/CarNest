@@ -1,29 +1,35 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ idioma|default:'es' }}">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}CarNest{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{% static 'css/nav.css' %}" rel="stylesheet">
+    <link href="{% static 'css/idioma.css' %}" rel="stylesheet">
 </head>
 <body class="body-carnest">
+
+{% if mostrar_selector %}
+    {% include 'partials/selector_idioma.html' %}
+{% endif %}
 
 <nav class="navbar navbar-dark navbar-carnest navbar-expand-lg">
     <div class="container">
         {% include 'partials/brand.html' %}
 
         <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
-            <a href="/inventario/" class="btn btn-outline-light">Vehículos</a>
+
+            <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-light">{% trans "Vehículos" %}</a>
 
             {% if user.is_authenticated and user.is_staff %}
-                <a href="/anuncios/" class="btn btn-outline-light">Anuncios</a>
+                <a href="{% url 'anuncios' %}" class="btn btn-outline-light">{% trans "Anuncios" %}</a>
             {% endif %}
 
             {% if request.user.is_authenticated %}
 
-                <a href="/carrito/" class="btn btn-outline-light position-relative">
-                    <img src="{% static 'img/carrito.png' %}" alt="Carrito">
+                <a href="{% url 'ver_carrito' %}" class="btn btn-outline-light position-relative">
+                    <img src="{% static 'img/carrito.png' %}" alt="{% trans 'Carrito' %}">
                     {% if carrito_count %}
                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
                               style="font-size:.65rem">
@@ -39,7 +45,7 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <a href="{% url 'mis_compras' %}" class="dropdown-item">
-                                Mis compras
+                                {% trans "Mis compras" %}
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
@@ -47,7 +53,7 @@
                             <form action="{% url 'logout' %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="dropdown-item">
-                                    Cerrar sesión
+                                    {% trans "Cerrar sesión" %}
                                 </button>
                             </form>
                         </li>
@@ -55,17 +61,25 @@
                 </div>
 
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-light">Login</a>
-                <a href="{% url 'registro' %}" class="btn btn-outline-light">Registro</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-light">{% trans "Iniciar sesión" %}</a>
+                <a href="{% url 'registro' %}" class="btn btn-outline-light">{% trans "Registro" %}</a>
             {% endif %}
+
+            <form method="post" action="" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="{% if idioma == 'en' %}es{% else %}en{% endif %}">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    {% if idioma == 'en' %}🇨🇴 ES{% else %}🇺🇸 EN{% endif %}
+                </button>
+            </form>
 
         </div>
     </div>
 </nav>
 
 <div class="container mt-4">
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

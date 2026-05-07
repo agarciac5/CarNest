@@ -1,27 +1,61 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from inventario.models import Vehiculo
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.utils.translation import gettext as _
+from inventario.models import Vehiculo
+from ventas.models import Venta
+
 
 @login_required
 def lista_anuncios(request):
-
     if not request.user.is_staff:
-        return redirect('/') 
+        return redirect('/')
 
-    vehiculos = Vehiculo.objects.filter(estado='posteado')
+    q = (request.GET.get('q') or '').strip()
+    vehiculos = Vehiculo.objects.filter(estado='posteado').select_related('propietario')
+    if q:
+        vehiculos = vehiculos.filter(marca__icontains=q) \
+                   | vehiculos.filter(modelo__icontains=q) \
+                   | vehiculos.filter(propietario__username__icontains=q)
 
     return render(request, 'anuncios/anuncios.html', {
-        'vehiculos': vehiculos
+        'vehiculos': vehiculos,
+        'q': q,
     })
 
 
 @login_required
 def comprar_vehiculo(request, id):
-
     if not request.user.is_staff:
         return redirect('/')
+    if request.method != 'POST':
+        return redirect('anuncios')
 
-    vehiculo = get_object_or_404(Vehiculo, id=id)
+    vehiculo = get_object_or_404(Vehiculo, id=id, estado='posteado')
     vehiculo.comprar_por_admin()
 
-    return redirect('/anuncios/')
+    Venta.objects.get_or_create(
+        vehiculo=vehiculo,
+        defaults={
+            'comprador': request.user,
+            'precio_final': vehiculo.precio,
+        }
+    )
+
+    messages.success(request, _('%(v)s fue comprado y ya aparece en el inventario.') % {'v': str(vehiculo)})
+    return redirect('anuncios')
+
+
+@login_required
+def rechazar_vehiculo(request, id):
+    if not request.user.is_superuser:
+        return redirect('/')
+    if request.method != 'POST':
+        return redirect('anuncios')
+
+    vehiculo = get_object_or_404(Vehiculo, id=id, estado='posteado')
+    nombre = str(vehiculo)
+    vehiculo.delete()
+
+    messages.warning(request, _('El anuncio de "%(v)s" fue rechazado y eliminado.') % {'v': nombre})
+    return redirect('anuncios')
