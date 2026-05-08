@@ -1,9 +1,8 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
-from inventario.models import Vehiculo
-from ventas.models import Venta
+from .services import aprobar_anuncio, listar_anuncios_pendientes, rechazar_anuncio
 
 
 @login_required
@@ -12,11 +11,7 @@ def lista_anuncios(request):
         return redirect('/')
 
     q = (request.GET.get('q') or '').strip()
-    vehiculos = Vehiculo.objects.filter(estado='posteado').select_related('propietario')
-    if q:
-        vehiculos = vehiculos.filter(marca__icontains=q) \
-                   | vehiculos.filter(modelo__icontains=q) \
-                   | vehiculos.filter(propietario__username__icontains=q)
+    vehiculos = listar_anuncios_pendientes(q)
 
     return render(request, 'anuncios/anuncios.html', {
         'vehiculos': vehiculos,
@@ -31,16 +26,7 @@ def comprar_vehiculo(request, id):
     if request.method != 'POST':
         return redirect('anuncios')
 
-    vehiculo = get_object_or_404(Vehiculo, id=id, estado='posteado')
-    vehiculo.comprar_por_admin()
-
-    Venta.objects.get_or_create(
-        vehiculo=vehiculo,
-        defaults={
-            'comprador': request.user,
-            'precio_final': vehiculo.precio,
-        }
-    )
+    vehiculo = aprobar_anuncio(id, request.user)
 
     messages.success(request, _('%(v)s fue comprado y ya aparece en el inventario.') % {'v': str(vehiculo)})
     return redirect('anuncios')
@@ -53,9 +39,7 @@ def rechazar_vehiculo(request, id):
     if request.method != 'POST':
         return redirect('anuncios')
 
-    vehiculo = get_object_or_404(Vehiculo, id=id, estado='posteado')
-    nombre = str(vehiculo)
-    vehiculo.delete()
+    nombre = rechazar_anuncio(id)
 
     messages.warning(request, _('El anuncio de "%(v)s" fue rechazado y eliminado.') % {'v': nombre})
     return redirect('anuncios')
