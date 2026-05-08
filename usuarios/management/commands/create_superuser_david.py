@@ -11,13 +11,13 @@ class Command(BaseCommand):
             username="david",
             defaults={
                 "email": "david@carnest.local",
-                "rol": User.Rol.PROPIETARIO,
+                "rol": User.Rol.ADMIN,
                 "is_staff": True,
                 "is_superuser": True,
             },
         )
         u.email = u.email or "david@carnest.local"
-        u.rol = User.Rol.PROPIETARIO
+        u.rol = User.Rol.ADMIN
         u.is_staff = True
         u.is_superuser = True
         u.set_password("12345")

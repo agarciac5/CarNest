@@ -22,7 +22,7 @@
 
             <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-light">{% trans "Vehículos" %}</a>
 
-            {% if user.is_authenticated and user.is_staff %}
+            {% if user.is_authenticated and user.rol == 'admin' %}
                 <a href="{% url 'anuncios' %}" class="btn btn-outline-light">{% trans "Anuncios" %}</a>
             {% endif %}
 

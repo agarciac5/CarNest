@@ -8,7 +8,7 @@ from ventas.models import Venta
 
 @login_required
 def lista_anuncios(request):
-    if not request.user.is_staff:
+    if request.user.rol != request.user.Rol.ADMIN:
         return redirect('/')
 
     q = (request.GET.get('q') or '').strip()
@@ -26,7 +26,7 @@ def lista_anuncios(request):
 
 @login_required
 def comprar_vehiculo(request, id):
-    if not request.user.is_staff:
+    if request.user.rol != request.user.Rol.ADMIN:
         return redirect('/')
     if request.method != 'POST':
         return redirect('anuncios')
@@ -48,7 +48,7 @@ def comprar_vehiculo(request, id):
 
 @login_required
 def rechazar_vehiculo(request, id):
-    if not request.user.is_superuser:
+    if request.user.rol != request.user.Rol.ADMIN:
         return redirect('/')
     if request.method != 'POST':
         return redirect('anuncios')

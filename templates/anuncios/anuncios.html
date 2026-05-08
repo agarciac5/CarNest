@@ -54,7 +54,7 @@
                         {% csrf_token %}
                         <button type="submit" class="btn btn-success btn-sm w-100">✔ {% trans "Comprar" %}</button>
                     </form>
-                    {% if request.user.is_superuser %}
+                    {% if request.user.rol == 'admin' %}
                     <form method="post" action="{% url 'rechazar_vehiculo' vehiculo.id %}" class="flex-fill"
                           onsubmit="return confirm('{% trans "¿Rechazar y eliminar este anuncio?" %}')">
                         {% csrf_token %}

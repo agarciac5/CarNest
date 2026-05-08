@@ -14,7 +14,7 @@
         </nav>
         <h1 class="h3 mb-4 text-white">{% trans "Publicar vehículo" %}</h1>
 
-        {% if request.user.is_superuser %}
+        {% if request.user.rol == 'admin' %}
             <p class="text-white small">{% trans "La publicación aparecerá directamente en el catálogo como En venta. Puedes subir una foto principal y varias adicionales." %}</p>
         {% else %}
             <p class="text-white small">{% trans "Tu vehículo será enviado a revisión. Una vez aprobado por nuestro equipo aparecerá en el catálogo." %}</p>
@@ -83,7 +83,7 @@
             </div>
             <div class="card-footer bg-light d-flex gap-2 justify-content-between flex-wrap">
                 <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary">{% trans "Cancelar" %}</a>
-                {% if request.user.is_superuser %}
+                {% if request.user.rol == 'admin' %}
                     <button type="submit" class="btn btn-success">{% trans "Publicar en inventario" %}</button>
                 {% else %}
                     <button type="submit" class="btn btn-primary">{% trans "Enviar a revisión" %}</button>
