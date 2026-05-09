@@ -8,7 +8,8 @@ docker compose exec web python manage.py migrate
 # Datos de ejemplo (opcional)
 docker compose exec web python manage.py seed_inventario
 
-# Superusuario david / 12345 (desarrollo)
+# Superusuario david (desarrollo)
+# Define DAVID_SUPERUSER_PASSWORD antes de ejecutarlo si necesitas acceso por login.
 python manage.py create_superuser_david
 docker compose exec web python manage.py create_superuser_david
 
