@@ -1,22 +1,19 @@
 """
 core/dependencies.py
 --------------------
-Implementaciones concretas de los protocolos definidos en core/protocols.py.
+Inyector de dependencias (Punto 3).
 
-Aquí se instancian los repositorios/servicios reales.
-Las vistas y la API los obtienen llamando a get_*(),
-lo que permite sustituir la implementación en tests
-sin tocar una sola línea de vista.
+Provee funciones get_*() que las vistas y la API usan
+para obtener sus dependencias sin importar servicios concretos.
 
-Ejemplo en tests:
-    from core import dependencies
-    dependencies._vehiculo_repo = MiRepoFalso()
+Los singletons pueden reemplazarse en tests:
+    import core.dependencies as deps
+    deps._vehiculo_repo = MiRepoFalso()
 """
 from __future__ import annotations
 
 from typing import Optional
 
-# ── importaciones de servicios concretos ─────────────────────────────────────
 from inventario.services import (
     listar_vehiculos_en_venta,
     obtener_detalle_vehiculo_en_venta,
@@ -34,7 +31,7 @@ from ventas.services import (
     confirmar_compra_vehiculos,
     listar_compras_usuario,
 )
-from core.services import TipoCambioService
+from core.services import TipoCambioConFallback
 
 
 # ── wrappers que adaptan las funciones sueltas al protocolo de clase ──────────
@@ -107,7 +104,13 @@ def get_venta_service():
 
 
 def get_tipo_cambio_service():
+    """
+    Retorna TipoCambioConFallback:
+    - Intenta primero TipoCambioService (API en vivo)
+    - Si falla, usa TipoCambioFijoService (tasa fija = 4200 COP/USD)
+    Esto demuestra la inversión de dependencias con DOS clases concretas.
+    """
     global _tipo_cambio_service
     if _tipo_cambio_service is None:
-        _tipo_cambio_service = TipoCambioService()
+        _tipo_cambio_service = TipoCambioConFallback()
     return _tipo_cambio_service

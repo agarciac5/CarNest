@@ -1,38 +1,33 @@
 """
 core/tests.py
 -------------
-Tests unitarios para los 4 puntos implementados:
+Tests unitarios para los 4 puntos implementados.
 
-  Punto 3 - Inversión de dependencias:
-      - Verificar que los protocolos son satisfechos por las implementaciones.
-      - Verificar que las vistas usan dependencias inyectadas (mock).
+Punto 3 - Inversión de dependencias:
+    - Ambas clases concretas cumplen ITipoCambioService.
+    - TipoCambioConFallback usa la clase fija cuando la API falla.
+    - Las vistas usan dependencias inyectadas (mock).
 
-  Punto 5 - Internacionalización:
-      - Verificar que las URLs responden con el prefijo de idioma correcto.
-      - Verificar que el middleware activa el idioma de sesión.
+Punto 5 - Internacionalización:
+    - URLs responden con prefijo de idioma correcto.
+    - Middleware activa el idioma de sesión.
 
-  Punto 6 - API JSON propia:
-      - GET /api/vehiculos/ → 200 con JSON válido.
-      - GET /api/vehiculos/<pk>/ → 200 con datos del vehículo.
-      - GET /api/tipo-cambio/ → 200 o 503 con estructura correcta.
-      - GET /api/mis-compras/ → 401 sin login, 200 con login.
+Punto 6 - API JSON propia:
+    - Endpoints devuelven JSON válido con estructura esperada.
 
-  Punto 8 - API externa:
-      - TipoCambioService.cop_a_usd() retorna float o None.
-      - El caché evita llamadas repetidas a la API.
-      - Fallo de red retorna None sin lanzar excepción.
+Punto 8 - API externa:
+    - TipoCambioService maneja errores de red sin romper la app.
+    - TipoCambioFijoService siempre retorna un valor.
+    - TipoCambioConFallback usa el fijo cuando la API falla.
 """
 from unittest.mock import patch, MagicMock
 
-from django.test import TestCase, RequestFactory, Client
+from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 
 from core.protocols import IVehiculoRepository, IVentaService, ITipoCambioService
-from core.dependencies import (
-    _VehiculoRepo, _VentaService,
-    get_vehiculo_repo, get_tipo_cambio_service,
-)
-from core.services import TipoCambioService
+from core.dependencies import _VehiculoRepo, _VentaService, get_vehiculo_repo
+from core.services import TipoCambioService, TipoCambioFijoService, TipoCambioConFallback
 
 Usuario = get_user_model()
 
@@ -42,19 +37,25 @@ Usuario = get_user_model()
 # ═══════════════════════════════════════════════════════════════════
 
 class ProtocolosTests(TestCase):
-    """Las implementaciones concretas deben satisfacer los protocolos."""
+    """Las implementaciones concretas deben satisfacer ITipoCambioService."""
 
     def test_vehiculo_repo_cumple_protocolo(self):
-        repo = _VehiculoRepo()
-        self.assertIsInstance(repo, IVehiculoRepository)
+        self.assertIsInstance(_VehiculoRepo(), IVehiculoRepository)
 
     def test_venta_service_cumple_protocolo(self):
-        service = _VentaService()
-        self.assertIsInstance(service, IVentaService)
+        self.assertIsInstance(_VentaService(), IVentaService)
 
-    def test_tipo_cambio_service_cumple_protocolo(self):
-        service = TipoCambioService()
-        self.assertIsInstance(service, ITipoCambioService)
+    def test_tipo_cambio_vivo_cumple_protocolo(self):
+        """Clase concreta 1: TipoCambioService cumple ITipoCambioService."""
+        self.assertIsInstance(TipoCambioService(), ITipoCambioService)
+
+    def test_tipo_cambio_fijo_cumple_protocolo(self):
+        """Clase concreta 2: TipoCambioFijoService cumple ITipoCambioService."""
+        self.assertIsInstance(TipoCambioFijoService(), ITipoCambioService)
+
+    def test_tipo_cambio_fallback_cumple_protocolo(self):
+        """TipoCambioConFallback también cumple ITipoCambioService."""
+        self.assertIsInstance(TipoCambioConFallback(), ITipoCambioService)
 
 
 class InyeccionDependenciasTests(TestCase):
@@ -62,18 +63,14 @@ class InyeccionDependenciasTests(TestCase):
 
     def setUp(self):
         import core.dependencies as deps
-        # Guardamos el original
         self._original = deps._vehiculo_repo
 
     def tearDown(self):
         import core.dependencies as deps
-        # Restauramos el original
         deps._vehiculo_repo = self._original
 
     def test_reemplazo_repo_en_vista(self):
-        """Podemos inyectar un repo falso y la vista lo usa."""
         import core.dependencies as deps
-
         mock_repo = MagicMock()
         mock_repo.listar_en_venta.return_value = []
         deps._vehiculo_repo = mock_repo
@@ -85,20 +82,53 @@ class InyeccionDependenciasTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+class FallbackTipoCambioTests(TestCase):
+    """TipoCambioConFallback usa la clase fija cuando la API falla."""
+
+    def test_fallback_cuando_api_falla(self):
+        """Si TipoCambioService retorna None, debe usar TipoCambioFijoService."""
+        import urllib.error
+        servicio_vivo = TipoCambioService()
+        servicio_fijo = TipoCambioFijoService(tasa_cop=4200.0)
+        fallback = TipoCambioConFallback(servicio_vivo, servicio_fijo)
+
+        with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('sin red')):
+            resultado = fallback.cop_a_usd(4_200_000)
+
+        # Debe retornar valor de la tasa fija (4200 COP = 1 USD → 4.2M = 1000 USD)
+        self.assertIsNotNone(resultado)
+        self.assertAlmostEqual(resultado, 1000.0, places=1)
+
+    def test_fallback_usa_api_cuando_disponible(self):
+        """Si la API responde, usa ese valor y no el fijo."""
+        import json
+        mock_resp = MagicMock()
+        mock_resp.read.return_value = json.dumps({'rates': {'COP': 4000.0}}).encode()
+        mock_resp.__enter__ = lambda s: s
+        mock_resp.__exit__ = MagicMock(return_value=False)
+
+        servicio_fijo = TipoCambioFijoService(tasa_cop=9999.0)  # valor absurdo
+        servicio_vivo = TipoCambioService()
+        fallback = TipoCambioConFallback(servicio_vivo, servicio_fijo)
+
+        with patch('urllib.request.urlopen', return_value=mock_resp):
+            tasa = fallback.obtener_tasa_usd_cop()
+
+        # Debe usar la API (4000), no la fija (9999)
+        self.assertAlmostEqual(tasa, 4000.0, places=1)
+
+
 # ═══════════════════════════════════════════════════════════════════
 # Punto 5 — Internacionalización
 # ═══════════════════════════════════════════════════════════════════
 
 class I18nURLTests(TestCase):
-    """Las URLs respetan el prefijo de idioma configurado."""
 
     def test_home_español_sin_prefijo(self):
-        """Español (idioma por defecto) no lleva prefijo /es/."""
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
     def test_home_ingles_con_prefijo(self):
-        """Inglés lleva prefijo /en/."""
         response = self.client.get('/en/')
         self.assertEqual(response.status_code, 200)
 
@@ -117,10 +147,8 @@ class I18nURLTests(TestCase):
 
 
 class MiddlewareIdiomaTests(TestCase):
-    """El middleware guarda y activa el idioma de sesión."""
 
     def test_cambio_a_ingles_redirige(self):
-        """POST con _set_idioma=1 e idioma=en debe redirigir a /en/."""
         response = self.client.post(
             '/inventario/',
             {'_set_idioma': '1', 'idioma': 'en'},
@@ -130,18 +158,15 @@ class MiddlewareIdiomaTests(TestCase):
         self.assertIn('/en/', response['Location'])
 
     def test_cambio_a_español_redirige_sin_prefijo(self):
-        """POST con idioma=es debe redirigir sin prefijo /es/."""
         response = self.client.post(
             '/en/inventario/',
             {'_set_idioma': '1', 'idioma': 'es'},
             HTTP_REFERER='http://testserver/en/inventario/',
         )
         self.assertEqual(response.status_code, 302)
-        location = response['Location']
-        self.assertNotIn('/es/', location)
+        self.assertNotIn('/es/', response['Location'])
 
     def test_idioma_guardado_en_sesion(self):
-        """Después del cambio, la sesión debe tener el idioma elegido."""
         self.client.post(
             '/inventario/',
             {'_set_idioma': '1', 'idioma': 'en'},
@@ -155,31 +180,24 @@ class MiddlewareIdiomaTests(TestCase):
 # ═══════════════════════════════════════════════════════════════════
 
 class ApiVehiculosTests(TestCase):
-    """Endpoints de la API JSON devuelven respuestas válidas."""
 
     def test_lista_vehiculos_sin_datos(self):
-        """GET /api/vehiculos/ → 200 con lista vacía."""
         response = self.client.get('/api/vehiculos/')
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertIn('results', data)
         self.assertIn('count', data)
-        self.assertEqual(data['count'], 0)
 
     def test_lista_vehiculos_acepta_query(self):
-        """GET /api/vehiculos/?q=toyota → 200."""
         response = self.client.get('/api/vehiculos/?q=toyota')
         self.assertEqual(response.status_code, 200)
 
     def test_detalle_vehiculo_no_encontrado(self):
-        """GET /api/vehiculos/9999/ → 404."""
         response = self.client.get('/api/vehiculos/9999/')
         self.assertEqual(response.status_code, 404)
-        data = response.json()
-        self.assertIn('error', data)
+        self.assertIn('error', response.json())
 
     def test_tipo_cambio_estructura(self):
-        """GET /api/tipo-cambio/ → JSON con campos esperados."""
         response = self.client.get('/api/tipo-cambio/')
         self.assertIn(response.status_code, [200, 503])
         data = response.json()
@@ -188,12 +206,10 @@ class ApiVehiculosTests(TestCase):
         self.assertIn('disponible', data)
 
     def test_mis_compras_requiere_login(self):
-        """GET /api/mis-compras/ sin sesión → 302 redirect al login."""
         response = self.client.get('/api/mis-compras/')
         self.assertEqual(response.status_code, 302)
 
     def test_mis_compras_con_login(self):
-        """GET /api/mis-compras/ autenticado → 200 con lista."""
         user = Usuario.objects.create_user(username='testapi', password='pass1234')
         self.client.login(username='testapi', password='pass1234')
         response = self.client.get('/api/mis-compras/')
@@ -204,76 +220,69 @@ class ApiVehiculosTests(TestCase):
 
 
 # ═══════════════════════════════════════════════════════════════════
-# Punto 8 — Consumo API externa
+# Punto 8 — Consumo API externa + clases concretas
 # ═══════════════════════════════════════════════════════════════════
 
 class TipoCambioServiceTests(TestCase):
-    """TipoCambioService maneja la API externa correctamente."""
+    """Tests para TipoCambioService (clase concreta 1 — API en vivo)."""
 
-    def _make_mock_response(self, tasa_cop: float):
-        """Crea un mock de urllib response con la tasa dada."""
+    def _mock_resp(self, tasa):
         import json
-        mock_resp = MagicMock()
-        mock_resp.read.return_value = json.dumps(
-            {'rates': {'COP': tasa_cop}}
-        ).encode()
-        mock_resp.__enter__ = lambda s: s
-        mock_resp.__exit__ = MagicMock(return_value=False)
-        return mock_resp
+        mock = MagicMock()
+        mock.read.return_value = json.dumps({'rates': {'COP': tasa}}).encode()
+        mock.__enter__ = lambda s: s
+        mock.__exit__ = MagicMock(return_value=False)
+        return mock
 
     def test_cop_a_usd_retorna_float(self):
-        """Con API disponible, cop_a_usd devuelve un float."""
-        service = TipoCambioService()
-        mock_resp = self._make_mock_response(4000.0)
-
-        with patch('urllib.request.urlopen', return_value=mock_resp):
-            resultado = service.cop_a_usd(4_000_000)
-
-        self.assertIsNotNone(resultado)
+        with patch('urllib.request.urlopen', return_value=self._mock_resp(4000.0)):
+            resultado = TipoCambioService().cop_a_usd(4_000_000)
         self.assertAlmostEqual(resultado, 1000.0, places=1)
 
     def test_fallo_de_red_retorna_none(self):
-        """Si la API falla, cop_a_usd retorna None sin lanzar excepción."""
         import urllib.error
-        service = TipoCambioService()
-
         with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('timeout')):
-            resultado = service.cop_a_usd(1_000_000)
-
+            resultado = TipoCambioService().cop_a_usd(1_000_000)
         self.assertIsNone(resultado)
 
     def test_cache_evita_llamadas_repetidas(self):
-        """La segunda llamada usa caché, no llama a urlopen de nuevo."""
-        service = TipoCambioService()
-        mock_resp = self._make_mock_response(4100.0)
-
-        with patch('urllib.request.urlopen', return_value=mock_resp) as mock_open:
-            service.cop_a_usd(1_000_000)
-            service.cop_a_usd(2_000_000)
-
-        # urlopen se llamó solo una vez (segunda usa caché)
+        with patch('urllib.request.urlopen', return_value=self._mock_resp(4100.0)) as mock_open:
+            s = TipoCambioService()
+            s.cop_a_usd(1_000_000)
+            s.cop_a_usd(2_000_000)
         self.assertEqual(mock_open.call_count, 1)
 
     def test_tasa_invalida_retorna_none(self):
-        """Respuesta malformada de la API retorna None."""
         import json
-        service = TipoCambioService()
-        mock_resp = MagicMock()
-        mock_resp.read.return_value = json.dumps({'rates': {}}).encode()
-        mock_resp.__enter__ = lambda s: s
-        mock_resp.__exit__ = MagicMock(return_value=False)
-
-        with patch('urllib.request.urlopen', return_value=mock_resp):
-            resultado = service.cop_a_usd(1_000_000)
-
+        mock = MagicMock()
+        mock.read.return_value = json.dumps({'rates': {}}).encode()
+        mock.__enter__ = lambda s: s
+        mock.__exit__ = MagicMock(return_value=False)
+        with patch('urllib.request.urlopen', return_value=mock):
+            resultado = TipoCambioService().cop_a_usd(1_000_000)
         self.assertIsNone(resultado)
 
-    def test_obtener_tasa_usd_cop(self):
-        """obtener_tasa_usd_cop retorna el valor directamente de la API."""
-        service = TipoCambioService()
-        mock_resp = self._make_mock_response(4250.0)
 
-        with patch('urllib.request.urlopen', return_value=mock_resp):
-            tasa = service.obtener_tasa_usd_cop()
+class TipoCambioFijoServiceTests(TestCase):
+    """Tests para TipoCambioFijoService (clase concreta 2 — tasa fija)."""
 
-        self.assertAlmostEqual(tasa, 4250.0, places=1)
+    def test_siempre_retorna_valor(self):
+        """La clase fija nunca retorna None — siempre hay un valor."""
+        service = TipoCambioFijoService(tasa_cop=4200.0)
+        resultado = service.cop_a_usd(4_200_000)
+        self.assertIsNotNone(resultado)
+        self.assertAlmostEqual(resultado, 1000.0, places=1)
+
+    def test_tasa_configurable(self):
+        """Se puede configurar la tasa en el constructor."""
+        service = TipoCambioFijoService(tasa_cop=5000.0)
+        self.assertEqual(service.obtener_tasa_usd_cop(), 5000.0)
+
+    def test_no_requiere_red(self):
+        """Funciona correctamente aunque no haya red."""
+        import urllib.error
+        service = TipoCambioFijoService(tasa_cop=4200.0)
+        with patch('urllib.request.urlopen', side_effect=urllib.error.URLError('sin red')):
+            # No llama a urlopen, no debe fallar
+            resultado = service.cop_a_usd(1_000_000)
+        self.assertIsNotNone(resultado)

@@ -9,8 +9,10 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-# Instalar gettext para compilar traducciones (makemessages/compilemessages)
-RUN apt-get update && apt-get install -y gettext && rm -rf /var/lib/apt/lists/*
+# Instalar gettext para compilar traducciones + dependencias del sistema
+RUN apt-get update && \
+    apt-get install -y gettext libpq-dev gcc && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
