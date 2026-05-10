@@ -1,4 +1,5 @@
 from io import BytesIO
+import os
 
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
@@ -111,9 +112,13 @@ class Command(BaseCommand):
             },
         )
         if created:
-            user.set_password('demo12345')
+            password = os.environ.get('CARNEST_DEMO_PASSWORD')
+            if password:
+                user.set_password(password)
+            else:
+                user.set_unusable_password()
             user.save()
-            self.stdout.write(self.style.SUCCESS('Usuario carnest_demo creado (contraseña: demo12345).'))
+            self.stdout.write(self.style.SUCCESS('Usuario carnest_demo creado.'))
         else:
             self.stdout.write('Usuario carnest_demo ya existía; se reutiliza.')
 

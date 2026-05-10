@@ -56,12 +56,7 @@ docker-compose exec web python manage.py createsuperuser
 
 ## Usuario de prueba
 
-Generado automáticamente con `seed_inventario`:
-
-| Campo | Valor |
-|---|---|
-| Usuario | `carnest_demo` |
-| Contraseña | `demo12345` |
+`seed_inventario` crea el usuario `carnest_demo`. Para asignarle contraseña, define `CARNEST_DEMO_PASSWORD` antes de ejecutar el comando.
 
 ---
 

@@ -1,11 +1,15 @@
-from django.shortcuts import render, redirect, get_object_or_404
+"""
+ventas/views.py
+---------------
+Punto 3 - Inversión de dependencias.
+Las vistas obtienen el servicio de ventas desde core.dependencies.
+"""
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 
-from inventario.models import Vehiculo
-from .models import Venta
+from core.dependencies import get_venta_service
 
 
 def _get_carrito(request):
@@ -20,7 +24,8 @@ def _save_carrito(request, lista):
 @login_required
 def ver_carrito(request):
     pks = _get_carrito(request)
-    vehiculos = Vehiculo.objects.filter(pk__in=pks)
+    service = get_venta_service()
+    vehiculos = service.obtener_vehiculos_carrito(pks)
 
     pks_validos = [v.pk for v in vehiculos if v.estado == 'en_venta']
     pks_removidos = [pk for pk in pks if pk not in pks_validos]
@@ -31,7 +36,7 @@ def ver_carrito(request):
             request,
             _('%(n)d vehículo(s) fueron removidos porque ya no están disponibles.') % {'n': len(pks_removidos)}
         )
-        vehiculos = vehiculos.filter(estado='en_venta')
+        vehiculos = service.obtener_vehiculos_carrito(pks_validos)
 
     total = sum(v.precio for v in vehiculos)
 
@@ -47,7 +52,8 @@ def agregar_al_carrito(request, pk):
     if request.method != 'POST':
         return redirect('lista_vehiculos')
 
-    vehiculo = get_object_or_404(Vehiculo, pk=pk, estado='en_venta')
+    service = get_venta_service()
+    vehiculo = service.obtener_vehiculo_en_venta(pk)
     carrito = _get_carrito(request)
 
     if vehiculo.pk in carrito:
@@ -85,26 +91,8 @@ def confirmar_compra(request):
         messages.warning(request, _('Tu carrito está vacío.'))
         return redirect('ver_carrito')
 
-    vehiculos = Vehiculo.objects.filter(pk__in=pks, estado='en_venta')
-    if not vehiculos.exists():
-        messages.error(request, _('Ningún vehículo disponible para comprar.'))
-        _save_carrito(request, [])
-        return redirect('ver_carrito')
-
-    comprados = []
-    errores = []
-
-    for vehiculo in vehiculos:
-        venta = Venta(
-            vehiculo=vehiculo,
-            comprador=request.user,
-            precio_final=vehiculo.precio,
-        )
-        try:
-            venta.realizar_venta()
-            comprados.append(str(vehiculo))
-        except ValidationError as e:
-            errores.append(f'{vehiculo}: {e.message}')
+    service = get_venta_service()
+    _, comprados, errores = service.confirmar_compra(pks, request.user)
 
     _save_carrito(request, [])
 
@@ -118,10 +106,6 @@ def confirmar_compra(request):
 
 @login_required
 def mis_compras(request):
-    compras = (
-        Venta.objects
-        .filter(comprador=request.user)
-        .select_related('vehiculo')
-        .order_by('-fecha')
-    )
+    service = get_venta_service()
+    compras = service.listar_compras_usuario(request.user)
     return render(request, 'ventas/mis_compras.html', {'compras': compras})
