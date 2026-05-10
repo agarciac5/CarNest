@@ -76,9 +76,9 @@
                 </p>
 
                 {% if idioma == 'en' and precio_usd %}
-                    <p class="precio-usd mb-3">
+                    <p class="precio-usd mb-3" style="color: #60a5fa; font-size: 1rem;">
                         ≈ <strong>${{ precio_usd|floatformat:0 }}</strong> USD
-                        <span class="precio-usd-note">(live exchange rate)</span>
+                        <span style="color: #94a3b8; font-size: 0.85rem;">(live exchange rate)</span>
                     </p>
                 {% endif %}
 

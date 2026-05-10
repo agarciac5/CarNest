@@ -8,6 +8,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY requirements.txt .
+
+# Instalar gettext para compilar traducciones (makemessages/compilemessages)
+RUN apt-get update && apt-get install -y gettext && rm -rf /var/lib/apt/lists/*
+
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . .

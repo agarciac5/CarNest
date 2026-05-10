@@ -1,32 +1,33 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# CarNest English translations
+# Punto 5: Internacionalización
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: CarNest 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-07 16:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2026-05-09 21:11+0000\n"
+"PO-Revision-Date: 2026-05-09 21:11+0000\n"
+"Last-Translator: CarNest Team\n"
+"Language-Team: English\n"
+"Language: en\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: anuncios/views.py:45
+#: anuncios/views.py:38
 #, python-format
-msgid "%(v)s fue comprado y ya aparece en el inventario."
-msgstr "%(v)s was purchased and is now listed in the inventory."
+msgid "Vehículo %(v)s aprobado y añadido al inventario."
+msgstr "Vehicle %(v)s approved and added to inventory."
 
-#: anuncios/views.py:60
+#: anuncios/views.py:53
 #, python-format
-msgid "El anuncio de \"%(v)s\" fue rechazado y eliminado."
-msgstr "The listing for \"%(v)s\" was rejected and removed."
+msgid "Anuncio \"%(n)s\" rechazado y eliminado."
+msgstr "Listing \"%(n)s\" rejected and deleted."
+
+#: core/api_views.py:94
+msgid "Vehículo no encontrado."
+msgstr "Vehicle not found."
 
 #: templates/anuncios/anuncios.html:4 templates/base.html:26
 msgid "Anuncios"
@@ -38,7 +39,7 @@ msgstr "Vehicle listings"
 
 #: templates/anuncios/anuncios.html:20
 msgid "Vehículos publicados por usuarios pendientes de revisión."
-msgstr "Vehicles posted by users pending your review."
+msgstr "Vehicles posted by users pending review."
 
 #: templates/anuncios/anuncios.html:24
 msgid "Buscar por marca, modelo o usuario…"
@@ -58,7 +59,7 @@ msgstr "Purchase this vehicle and add it to inventory?"
 
 #: templates/anuncios/anuncios.html:55
 msgid "Comprar"
-msgstr "Buy"
+msgstr "Purchase"
 
 #: templates/anuncios/anuncios.html:59
 msgid "¿Rechazar y eliminar este anuncio?"
@@ -76,7 +77,7 @@ msgstr "No pending listings"
 msgid ""
 "Cuando los usuarios publiquen vehículos aparecerán aquí para tu revisión."
 msgstr ""
-"When users publish vehicles they will appear here for your review."
+"When users post vehicles they will appear here for your review."
 
 #: templates/base.html:23 templates/inventario/crear_vehiculo.html:11
 #: templates/inventario/detalle_vehiculo.html:12
@@ -90,7 +91,7 @@ msgstr "Cart"
 #: templates/base.html:48 templates/ventas/mis_compras.html:4
 #: templates/ventas/mis_compras.html:9
 msgid "Mis compras"
-msgstr "My Purchases"
+msgstr "My purchases"
 
 #: templates/base.html:56
 msgid "Cerrar sesión"
@@ -153,7 +154,7 @@ msgid ""
 "Compara precios fácilmente y encuentra la mejor oferta del mercado "
 "colombiano."
 msgstr ""
-"Easily compare prices and find the best deal on the Colombian market."
+"Compare prices easily and find the best deal in the Colombian market."
 
 #: templates/index.html:56
 msgid "Proceso simple"
@@ -163,7 +164,8 @@ msgstr "Simple process"
 msgid ""
 "Publica tu vehículo o realiza tu compra en pocos pasos, sin complicaciones."
 msgstr ""
-"List your vehicle or make your purchase in just a few steps, hassle-free."
+"List your vehicle or complete your purchase in just a few steps, "
+"hassle-free."
 
 #: templates/index.html:65
 msgid "Soporte directo"
@@ -186,12 +188,11 @@ msgstr "Create your account"
 
 #: templates/index.html:79
 msgid "Regístrate gratis en segundos. Solo necesitas tu correo electrónico."
-msgstr ""
-"Register for free in seconds. You only need your email address."
+msgstr "Sign up for free in seconds. All you need is your email address."
 
 #: templates/index.html:88
 msgid "Explora el catálogo"
-msgstr "Browse the catalog"
+msgstr "Explore the catalog"
 
 #: templates/index.html:89
 msgid ""
@@ -207,7 +208,8 @@ msgstr "List or buy"
 msgid ""
 "Vende tu vehículo o añade al carrito el que te enamoró. Es así de sencillo."
 msgstr ""
-"Sell your vehicle or add the one you love to your cart. It's that simple."
+"Sell your vehicle or add the one you fell for to your cart. It's that "
+"simple."
 
 #: templates/index.html:108
 msgid "¿Listo para encontrar tu próximo auto?"
@@ -215,7 +217,7 @@ msgstr "Ready to find your next car?"
 
 #: templates/index.html:109
 msgid "Únete a miles de personas que ya compran y venden en CarNest."
-msgstr "Join thousands of people who already buy and sell on CarNest."
+msgstr "Join thousands of people already buying and selling on CarNest."
 
 #: templates/index.html:111
 msgid "Crear cuenta gratis"
@@ -232,7 +234,7 @@ msgstr "Listing submitted"
 
 #: templates/inventario/aviso_publicacion.html:9
 msgid "¡Tu anuncio fue enviado!"
-msgstr "Your listing has been submitted!"
+msgstr "Your listing was submitted!"
 
 #: templates/inventario/aviso_publicacion.html:11
 msgid ""
@@ -240,17 +242,17 @@ msgid ""
 "con nuestros estándares. Podrás verlo en el catálogo una vez sea aprobado."
 msgstr ""
 "Our team will review your vehicle and add it to the inventory if it meets "
-"our standards. You will be able to see it in the catalog once it is approved."
+"our standards. You will be able to see it in the catalog once approved."
 
 #: templates/inventario/aviso_publicacion.html:15
 msgid "Publicar otro vehículo"
-msgstr "Publish another vehicle"
+msgstr "List another vehicle"
 
 #: templates/inventario/crear_vehiculo.html:4
 #: templates/inventario/crear_vehiculo.html:15
 #: templates/inventario/inventary.html:29
 msgid "Publicar vehículo"
-msgstr "Publish vehicle"
+msgstr "List a vehicle"
 
 #: templates/inventario/crear_vehiculo.html:12
 msgid "Publicar"
@@ -261,7 +263,7 @@ msgid ""
 "La publicación aparecerá directamente en el catálogo como En venta. Puedes "
 "subir una foto principal y varias adicionales."
 msgstr ""
-"The listing will appear directly in the catalog as For sale. You can upload "
+"The listing will appear directly in the catalog as For Sale. You can upload "
 "a main photo and several additional ones."
 
 #: templates/inventario/crear_vehiculo.html:20
@@ -309,7 +311,7 @@ msgstr "E.g. Pearl white"
 #: templates/inventario/detalle_vehiculo.html:92
 #: templates/ventas/mis_compras.html:37
 msgid "Combustible"
-msgstr "Fuel"
+msgstr "Fuel type"
 
 #: templates/inventario/crear_vehiculo.html:54
 msgid "Gasolina"
@@ -368,7 +370,7 @@ msgstr "Cancel"
 
 #: templates/inventario/crear_vehiculo.html:87
 msgid "Publicar en inventario"
-msgstr "Publish in inventory"
+msgstr "Publish to inventory"
 
 #: templates/inventario/crear_vehiculo.html:89
 msgid "Enviar a revisión"
@@ -417,7 +419,7 @@ msgstr "Log in to purchase"
 #: templates/inventario/detalle_vehiculo.html:117
 #: templates/usuarios/login.html:36
 msgid "¿No tienes cuenta?"
-msgstr "No account?"
+msgstr "Don't have an account?"
 
 #: templates/inventario/detalle_vehiculo.html:117
 msgid "Regístrate gratis"
@@ -432,8 +434,8 @@ msgid ""
 "Explora modelos en venta, filtra por marca o modelo y abre la ficha para ver "
 "fotos y datos completos."
 msgstr ""
-"Explore models for sale, filter by brand or model and open the listing to "
-"see full photos and details."
+"Browse models for sale, filter by brand or model and open the listing to see "
+"photos and full details."
 
 #: templates/inventario/inventary.html:19
 msgid "Buscar por marca, modelo, año, color…"
@@ -449,7 +451,7 @@ msgstr "Log in"
 
 #: templates/inventario/inventary.html:32
 msgid "para publicar un vehículo en el inventario."
-msgstr "to publish a vehicle in the inventory."
+msgstr "to list a vehicle in the inventory."
 
 #: templates/inventario/inventary.html:47 templates/ventas/carrito.html:40
 #: templates/ventas/mis_compras.html:51
@@ -479,7 +481,7 @@ msgstr "Create account"
 
 #: templates/usuarios/login.html:14
 msgid "Accede a tu cuenta para publicar y gestionar vehículos."
-msgstr "Access your account to publish and manage vehicles."
+msgstr "Access your account to list and manage vehicles."
 
 #: templates/usuarios/login.html:25 templates/usuarios/signup.html:28
 msgid "Usuario"
@@ -491,7 +493,7 @@ msgstr "Password"
 
 #: templates/usuarios/login.html:32
 msgid "Entrar"
-msgstr "Enter"
+msgstr "Sign in"
 
 #: templates/usuarios/login.html:36
 msgid "Regístrate aquí"
@@ -515,7 +517,7 @@ msgstr "Confirm password"
 
 #: templates/usuarios/signup.html:47
 msgid "Registrarse"
-msgstr "Register"
+msgstr "Sign up"
 
 #: templates/usuarios/signup.html:51
 msgid "¿Ya tienes cuenta?"
@@ -527,7 +529,7 @@ msgstr "My cart"
 
 #: templates/ventas/carrito.html:11
 msgid "Revisa los vehículos seleccionados antes de confirmar tu compra."
-msgstr "Review your selected vehicles before confirming your purchase."
+msgstr "Review the selected vehicles before confirming your purchase."
 
 #: templates/ventas/carrito.html:25
 msgid "Carrito vacío"
@@ -539,7 +541,7 @@ msgstr "Your cart is empty"
 
 #: templates/ventas/carrito.html:27
 msgid "Explora el catálogo y añade vehículos que te interesen."
-msgstr "Explore the catalog and add vehicles you like."
+msgstr "Explore the catalog and add vehicles you're interested in."
 
 #: templates/ventas/carrito.html:28 templates/ventas/mis_compras.html:28
 msgid "Ver vehículos disponibles"
@@ -567,11 +569,11 @@ msgstr "Confirm purchase"
 
 #: templates/ventas/carrito.html:79
 msgid "Seguir explorando"
-msgstr "Keep browsing"
+msgstr "Keep exploring"
 
 #: templates/ventas/carrito.html:80
 msgid "Al confirmar, los vehículos quedarán registrados a tu nombre."
-msgstr "By confirming, the vehicles will be registered in your name."
+msgstr "Upon confirmation, the vehicles will be registered in your name."
 
 #: templates/ventas/mis_compras.html:10
 msgid "Historial de vehículos adquiridos en CarNest."
@@ -597,39 +599,35 @@ msgstr "Price paid"
 msgid "Fecha de compra"
 msgstr "Purchase date"
 
-#: ventas/views.py:32
+#: ventas/views.py:37
 #, python-format
 msgid "%(n)d vehículo(s) fueron removidos porque ya no están disponibles."
 msgstr "%(n)d vehicle(s) were removed because they are no longer available."
 
-#: ventas/views.py:54
+#: ventas/views.py:60
 #, python-format
 msgid "%(v)s ya está en tu carrito."
 msgstr "%(v)s is already in your cart."
 
-#: ventas/views.py:58
+#: ventas/views.py:64
 #, python-format
 msgid "%(v)s añadido al carrito."
 msgstr "%(v)s added to your cart."
 
-#: ventas/views.py:73
+#: ventas/views.py:79
 msgid "Vehículo eliminado del carrito."
 msgstr "Vehicle removed from cart."
 
-#: ventas/views.py:85
+#: ventas/views.py:91
 msgid "Tu carrito está vacío."
 msgstr "Your cart is empty."
 
-#: ventas/views.py:90
-msgid "Ningún vehículo disponible para comprar."
-msgstr "No vehicles available for purchase."
-
-#: ventas/views.py:112
+#: ventas/views.py:100
 #, python-format
 msgid "¡Compra exitosa! Adquiriste: %(v)s."
 msgstr "Purchase successful! You acquired: %(v)s."
 
-#: ventas/views.py:114
+#: ventas/views.py:102
 #, python-format
 msgid "No se pudieron comprar: %(e)s"
 msgstr "Could not purchase: %(e)s"
