@@ -102,6 +102,7 @@ TIME_ZONE = 'UTC'
 # ───────────────────────────────────────────────────────────────────
 
 STATIC_URL = 'static/'
+STATIC_ROOT = '/app/staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
