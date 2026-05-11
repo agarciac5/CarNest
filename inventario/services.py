@@ -67,7 +67,7 @@ def crear_vehiculo_desde_form(data, files, propietario):
         transmision=data.get('transmision', 'manual'),
         descripcion=data.get('descripcion', '').strip(),
         propietario=propietario,
-        estado='en_venta',
+        estado='en_venta' if propietario.is_staff else 'posteado',
     )
     if files.get('imagen'):
         vehiculo.imagen = files['imagen']

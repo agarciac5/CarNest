@@ -53,5 +53,10 @@ def crear_vehiculo(request):
     if request.method == 'POST':
         repo = get_vehiculo_repo()
         vehiculo = repo.crear_desde_form(request.POST, request.FILES, request.user)
+        if vehiculo.estado == 'posteado':
+            return redirect('aviso_publicacion')
         return redirect('detalle_vehiculo', pk=vehiculo.pk)
     return render(request, 'inventario/crear_vehiculo.html')
+
+def aviso_publicacion(request):
+    return render(request, 'inventario/aviso_publicacion.html')
