@@ -1,0 +1,130 @@
+{% load i18n %}
+<div class="lang-overlay" id="langOverlay">
+    <div class="lang-box">
+
+        <div class="lang-brand">
+            <span class="lang-brand-name">CarNest</span>
+            <span class="lang-brand-sub">BUY · SELL · DRIVE</span>
+        </div>
+
+        <p class="lang-title">Select your language / Elige tu idioma</p>
+
+        <div class="lang-buttons">
+            <form method="post" action="" class="lang-form">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="es">
+                <button type="submit" class="lang-btn">
+                    <span class="lang-flag">🇨🇴</span>
+                    <span class="lang-label">Español</span>
+                </button>
+            </form>
+
+            <form method="post" action="" class="lang-form">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="en">
+                <button type="submit" class="lang-btn">
+                    <span class="lang-flag">🇺🇸</span>
+                    <span class="lang-label">English</span>
+                </button>
+            </form>
+        </div>
+
+        <p class="lang-note">You can change this anytime from the menu</p>
+
+    </div>
+</div>
+
+<style>
+.lang-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.lang-box {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    width: 340px;
+    text-align: center;
+}
+
+.lang-brand {
+    margin-bottom: 1.5rem;
+}
+
+.lang-brand-name {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: 0.02em;
+}
+
+.lang-brand-sub {
+    display: block;
+    font-size: 0.7rem;
+    color: #64748b;
+    letter-spacing: 0.12em;
+    margin-top: 4px;
+}
+
+.lang-title {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin: 0 0 1.5rem;
+}
+
+.lang-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.lang-form {
+    flex: 1;
+}
+
+.lang-btn {
+    width: 100%;
+    padding: 14px 12px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.lang-btn:hover {
+    border-color: #2563eb;
+    background: #1e3a5f;
+}
+
+.lang-flag {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.lang-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #f1f5f9;
+}
+
+.lang-note {
+    font-size: 0.75rem;
+    color: #475569;
+    margin: 1.25rem 0 0;
+}
+</style>

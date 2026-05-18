@@ -1,0 +1,633 @@
+# CarNest English translations
+# Punto 5: Internacionalización
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: CarNest 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-09 21:11+0000\n"
+"PO-Revision-Date: 2026-05-09 21:11+0000\n"
+"Last-Translator: CarNest Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: anuncios/views.py:38
+#, python-format
+msgid "Vehículo %(v)s aprobado y añadido al inventario."
+msgstr "Vehicle %(v)s approved and added to inventory."
+
+#: anuncios/views.py:53
+#, python-format
+msgid "Anuncio \"%(n)s\" rechazado y eliminado."
+msgstr "Listing \"%(n)s\" rejected and deleted."
+
+#: core/api_views.py:94
+msgid "Vehículo no encontrado."
+msgstr "Vehicle not found."
+
+#: templates/anuncios/anuncios.html:4 templates/base.html:26
+msgid "Anuncios"
+msgstr "Listings"
+
+#: templates/anuncios/anuncios.html:19
+msgid "Anuncios de vehículos"
+msgstr "Vehicle listings"
+
+#: templates/anuncios/anuncios.html:20
+msgid "Vehículos publicados por usuarios pendientes de revisión."
+msgstr "Vehicles posted by users pending review."
+
+#: templates/anuncios/anuncios.html:24
+msgid "Buscar por marca, modelo o usuario…"
+msgstr "Search by brand, model or user…"
+
+#: templates/anuncios/anuncios.html:25 templates/inventario/inventary.html:21
+msgid "Buscar"
+msgstr "Search"
+
+#: templates/anuncios/anuncios.html:48
+msgid "Publicado por"
+msgstr "Posted by"
+
+#: templates/anuncios/anuncios.html:53
+msgid "¿Comprar este vehículo y añadirlo al inventario?"
+msgstr "Purchase this vehicle and add it to inventory?"
+
+#: templates/anuncios/anuncios.html:55
+msgid "Comprar"
+msgstr "Purchase"
+
+#: templates/anuncios/anuncios.html:59
+msgid "¿Rechazar y eliminar este anuncio?"
+msgstr "Reject and delete this listing?"
+
+#: templates/anuncios/anuncios.html:61
+msgid "Rechazar"
+msgstr "Reject"
+
+#: templates/anuncios/anuncios.html:70
+msgid "No hay anuncios pendientes"
+msgstr "No pending listings"
+
+#: templates/anuncios/anuncios.html:71
+msgid ""
+"Cuando los usuarios publiquen vehículos aparecerán aquí para tu revisión."
+msgstr ""
+"When users post vehicles they will appear here for your review."
+
+#: templates/base.html:23 templates/inventario/crear_vehiculo.html:11
+#: templates/inventario/detalle_vehiculo.html:12
+msgid "Vehículos"
+msgstr "Vehicles"
+
+#: templates/base.html:32
+msgid "Carrito"
+msgstr "Cart"
+
+#: templates/base.html:48 templates/ventas/mis_compras.html:4
+#: templates/ventas/mis_compras.html:9
+msgid "Mis compras"
+msgstr "My purchases"
+
+#: templates/base.html:56
+msgid "Cerrar sesión"
+msgstr "Log out"
+
+#: templates/base.html:64 templates/usuarios/login.html:4
+#: templates/usuarios/login.html:13
+msgid "Iniciar sesión"
+msgstr "Log in"
+
+#: templates/base.html:65 templates/usuarios/signup.html:4
+msgid "Registro"
+msgstr "Register"
+
+#: templates/index.html:4 templates/index.html:12
+#: templates/inventario/detalle_vehiculo.html:11
+msgid "Inicio"
+msgstr "Home"
+
+#: templates/index.html:14
+msgid ""
+"Bienvenido a <strong>CarNest</strong>, el portal de confianza donde podrás "
+"vender tu auto y encontrar el de tus sueños; con muchísimas referencias de "
+"las que elegir. Nunca fue tan fácil."
+msgstr ""
+"Welcome to <strong>CarNest</strong>, the trusted portal where you can sell "
+"your car and find the one of your dreams; with countless references to "
+"choose from. It's never been easier."
+
+#: templates/index.html:18
+msgid "Ver vehículos"
+msgstr "Browse vehicles"
+
+#: templates/index.html:22
+msgid "Registrarme gratis"
+msgstr "Register for free"
+
+#: templates/index.html:31
+msgid "¿Por qué elegir CarNest?"
+msgstr "Why choose CarNest?"
+
+#: templates/index.html:38
+msgid "Verificados"
+msgstr "Verified"
+
+#: templates/index.html:39
+msgid ""
+"Todos los vehículos pasan por un proceso de validación antes de publicarse "
+"en el catálogo."
+msgstr ""
+"All vehicles go through a validation process before being listed in the "
+"catalog."
+
+#: templates/index.html:47
+msgid "Precios justos"
+msgstr "Fair prices"
+
+#: templates/index.html:48
+msgid ""
+"Compara precios fácilmente y encuentra la mejor oferta del mercado "
+"colombiano."
+msgstr ""
+"Compare prices easily and find the best deal in the Colombian market."
+
+#: templates/index.html:56
+msgid "Proceso simple"
+msgstr "Simple process"
+
+#: templates/index.html:57
+msgid ""
+"Publica tu vehículo o realiza tu compra en pocos pasos, sin complicaciones."
+msgstr ""
+"List your vehicle or complete your purchase in just a few steps, "
+"hassle-free."
+
+#: templates/index.html:65
+msgid "Soporte directo"
+msgstr "Direct support"
+
+#: templates/index.html:66
+msgid ""
+"Nuestro equipo está disponible para ayudarte en cada etapa de tu compra o "
+"venta."
+msgstr ""
+"Our team is available to help you at every stage of your purchase or sale."
+
+#: templates/index.html:73
+msgid "¿Cómo funciona?"
+msgstr "How does it work?"
+
+#: templates/index.html:78
+msgid "Crea tu cuenta"
+msgstr "Create your account"
+
+#: templates/index.html:79
+msgid "Regístrate gratis en segundos. Solo necesitas tu correo electrónico."
+msgstr "Sign up for free in seconds. All you need is your email address."
+
+#: templates/index.html:88
+msgid "Explora el catálogo"
+msgstr "Explore the catalog"
+
+#: templates/index.html:89
+msgid ""
+"Filtra por marca, modelo, año y precio. Encuentra el auto perfecto para ti."
+msgstr ""
+"Filter by brand, model, year and price. Find the perfect car for you."
+
+#: templates/index.html:98
+msgid "Publica o compra"
+msgstr "List or buy"
+
+#: templates/index.html:99
+msgid ""
+"Vende tu vehículo o añade al carrito el que te enamoró. Es así de sencillo."
+msgstr ""
+"Sell your vehicle or add the one you fell for to your cart. It's that "
+"simple."
+
+#: templates/index.html:108
+msgid "¿Listo para encontrar tu próximo auto?"
+msgstr "Ready to find your next car?"
+
+#: templates/index.html:109
+msgid "Únete a miles de personas que ya compran y venden en CarNest."
+msgstr "Join thousands of people already buying and selling on CarNest."
+
+#: templates/index.html:111
+msgid "Crear cuenta gratis"
+msgstr "Create free account"
+
+#: templates/index.html:112 templates/inventario/aviso_publicacion.html:14
+#: templates/ventas/mis_compras.html:12
+msgid "Ver catálogo"
+msgstr "View catalog"
+
+#: templates/inventario/aviso_publicacion.html:4
+msgid "Anuncio enviado"
+msgstr "Listing submitted"
+
+#: templates/inventario/aviso_publicacion.html:9
+msgid "¡Tu anuncio fue enviado!"
+msgstr "Your listing was submitted!"
+
+#: templates/inventario/aviso_publicacion.html:11
+msgid ""
+"Nuestro equipo revisará tu vehículo y lo incorporará al inventario si cumple "
+"con nuestros estándares. Podrás verlo en el catálogo una vez sea aprobado."
+msgstr ""
+"Our team will review your vehicle and add it to the inventory if it meets "
+"our standards. You will be able to see it in the catalog once approved."
+
+#: templates/inventario/aviso_publicacion.html:15
+msgid "Publicar otro vehículo"
+msgstr "List another vehicle"
+
+#: templates/inventario/crear_vehiculo.html:4
+#: templates/inventario/crear_vehiculo.html:15
+#: templates/inventario/inventary.html:29
+msgid "Publicar vehículo"
+msgstr "List a vehicle"
+
+#: templates/inventario/crear_vehiculo.html:12
+msgid "Publicar"
+msgstr "Publish"
+
+#: templates/inventario/crear_vehiculo.html:18
+msgid ""
+"La publicación aparecerá directamente en el catálogo como En venta. Puedes "
+"subir una foto principal y varias adicionales."
+msgstr ""
+"The listing will appear directly in the catalog as For Sale. You can upload "
+"a main photo and several additional ones."
+
+#: templates/inventario/crear_vehiculo.html:20
+msgid ""
+"Tu vehículo será enviado a revisión. Una vez aprobado por nuestro equipo "
+"aparecerá en el catálogo."
+msgstr ""
+"Your vehicle will be sent for review. Once approved by our team it will "
+"appear in the catalog."
+
+#: templates/inventario/crear_vehiculo.html:28
+msgid "Marca"
+msgstr "Brand"
+
+#: templates/inventario/crear_vehiculo.html:32
+msgid "Modelo"
+msgstr "Model"
+
+#: templates/inventario/crear_vehiculo.html:36
+#: templates/inventario/detalle_vehiculo.html:86
+#: templates/ventas/mis_compras.html:36
+msgid "Año"
+msgstr "Year"
+
+#: templates/inventario/crear_vehiculo.html:40
+#: templates/inventario/detalle_vehiculo.html:70
+msgid "Precio"
+msgstr "Price"
+
+#: templates/inventario/crear_vehiculo.html:44
+#: templates/inventario/detalle_vehiculo.html:88
+msgid "Kilometraje"
+msgstr "Mileage"
+
+#: templates/inventario/crear_vehiculo.html:48
+#: templates/inventario/detalle_vehiculo.html:90
+msgid "Color"
+msgstr "Color"
+
+#: templates/inventario/crear_vehiculo.html:49
+msgid "Ej. Blanco perla"
+msgstr "E.g. Pearl white"
+
+#: templates/inventario/crear_vehiculo.html:52
+#: templates/inventario/detalle_vehiculo.html:92
+#: templates/ventas/mis_compras.html:37
+msgid "Combustible"
+msgstr "Fuel type"
+
+#: templates/inventario/crear_vehiculo.html:54
+msgid "Gasolina"
+msgstr "Gasoline"
+
+#: templates/inventario/crear_vehiculo.html:55
+msgid "Diésel"
+msgstr "Diesel"
+
+#: templates/inventario/crear_vehiculo.html:56
+msgid "Híbrido"
+msgstr "Hybrid"
+
+#: templates/inventario/crear_vehiculo.html:57
+msgid "Eléctrico"
+msgstr "Electric"
+
+#: templates/inventario/crear_vehiculo.html:62
+#: templates/inventario/detalle_vehiculo.html:94
+#: templates/ventas/mis_compras.html:38
+msgid "Transmisión"
+msgstr "Transmission"
+
+#: templates/inventario/crear_vehiculo.html:64
+msgid "Manual"
+msgstr "Manual"
+
+#: templates/inventario/crear_vehiculo.html:65
+msgid "Automática"
+msgstr "Automatic"
+
+#: templates/inventario/crear_vehiculo.html:70
+#: templates/inventario/detalle_vehiculo.html:123
+msgid "Descripción"
+msgstr "Description"
+
+#: templates/inventario/crear_vehiculo.html:71
+msgid "Historial, equipamiento, estado general…"
+msgstr "History, equipment, general condition…"
+
+#: templates/inventario/crear_vehiculo.html:74
+msgid "Foto principal"
+msgstr "Main photo"
+
+#: templates/inventario/crear_vehiculo.html:78
+msgid "Fotos adicionales (galería)"
+msgstr "Additional photos (gallery)"
+
+#: templates/inventario/crear_vehiculo.html:80
+msgid "Puedes seleccionar varias imágenes a la vez."
+msgstr "You can select multiple images at once."
+
+#: templates/inventario/crear_vehiculo.html:85
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/inventario/crear_vehiculo.html:87
+msgid "Publicar en inventario"
+msgstr "Publish to inventory"
+
+#: templates/inventario/crear_vehiculo.html:89
+msgid "Enviar a revisión"
+msgstr "Submit for review"
+
+#: templates/inventario/detalle_vehiculo.html:13
+msgid "Volver al catálogo"
+msgstr "Back to catalog"
+
+#: templates/inventario/detalle_vehiculo.html:16
+#: templates/inventario/detalle_vehiculo.html:18
+#: templates/inventario/detalle_vehiculo.html:49
+msgid "Anterior"
+msgstr "Previous"
+
+#: templates/inventario/detalle_vehiculo.html:21
+#: templates/inventario/detalle_vehiculo.html:23
+#: templates/inventario/detalle_vehiculo.html:53
+msgid "Siguiente"
+msgstr "Next"
+
+#: templates/inventario/detalle_vehiculo.html:42
+msgid "Foto"
+msgstr "Photo"
+
+#: templates/inventario/detalle_vehiculo.html:59
+msgid "Sin fotos"
+msgstr "No photos"
+
+#: templates/inventario/detalle_vehiculo.html:96
+msgid "Publicado"
+msgstr "Listed"
+
+#: templates/inventario/detalle_vehiculo.html:106
+msgid "Agregar al carrito"
+msgstr "Add to cart"
+
+#: templates/inventario/detalle_vehiculo.html:110
+msgid "Ver mi carrito"
+msgstr "View my cart"
+
+#: templates/inventario/detalle_vehiculo.html:114
+msgid "Inicia sesión para comprar"
+msgstr "Log in to purchase"
+
+#: templates/inventario/detalle_vehiculo.html:117
+#: templates/usuarios/login.html:36
+msgid "¿No tienes cuenta?"
+msgstr "Don't have an account?"
+
+#: templates/inventario/detalle_vehiculo.html:117
+msgid "Regístrate gratis"
+msgstr "Register for free"
+
+#: templates/inventario/inventary.html:4 templates/inventario/inventary.html:12
+msgid "Catálogo de vehículos"
+msgstr "Vehicle catalog"
+
+#: templates/inventario/inventary.html:13
+msgid ""
+"Explora modelos en venta, filtra por marca o modelo y abre la ficha para ver "
+"fotos y datos completos."
+msgstr ""
+"Browse models for sale, filter by brand or model and open the listing to see "
+"photos and full details."
+
+#: templates/inventario/inventary.html:19
+msgid "Buscar por marca, modelo, año, color…"
+msgstr "Search by brand, model, year, color…"
+
+#: templates/inventario/inventary.html:20
+msgid "Buscar vehículos"
+msgstr "Search vehicles"
+
+#: templates/inventario/inventary.html:32 templates/usuarios/signup.html:51
+msgid "Inicia sesión"
+msgstr "Log in"
+
+#: templates/inventario/inventary.html:32
+msgid "para publicar un vehículo en el inventario."
+msgstr "to list a vehicle in the inventory."
+
+#: templates/inventario/inventary.html:47 templates/ventas/carrito.html:40
+#: templates/ventas/mis_compras.html:51
+msgid "Sin imagen"
+msgstr "No image"
+
+#: templates/inventario/inventary.html:54
+msgid "En venta"
+msgstr "For sale"
+
+#: templates/inventario/inventary.html:66
+#, python-format
+msgid "No hay resultados para \"%(q)s\"."
+msgstr "No results for \"%(q)s\"."
+
+#: templates/inventario/inventary.html:67
+msgid "Ver todo el catálogo"
+msgstr "View full catalog"
+
+#: templates/inventario/inventary.html:69
+msgid "No hay vehículos disponibles por ahora."
+msgstr "No vehicles available right now."
+
+#: templates/usuarios/login.html:7 templates/usuarios/signup.html:13
+msgid "Crear cuenta"
+msgstr "Create account"
+
+#: templates/usuarios/login.html:14
+msgid "Accede a tu cuenta para publicar y gestionar vehículos."
+msgstr "Access your account to list and manage vehicles."
+
+#: templates/usuarios/login.html:25 templates/usuarios/signup.html:28
+msgid "Usuario"
+msgstr "Username"
+
+#: templates/usuarios/login.html:29 templates/usuarios/signup.html:38
+msgid "Contraseña"
+msgstr "Password"
+
+#: templates/usuarios/login.html:32
+msgid "Entrar"
+msgstr "Sign in"
+
+#: templates/usuarios/login.html:36
+msgid "Regístrate aquí"
+msgstr "Register here"
+
+#: templates/usuarios/signup.html:7
+msgid "Ya tengo cuenta"
+msgstr "I already have an account"
+
+#: templates/usuarios/signup.html:14
+msgid "Únete a CarNest para comprar y vender vehículos."
+msgstr "Join CarNest to buy and sell vehicles."
+
+#: templates/usuarios/signup.html:33
+msgid "Correo"
+msgstr "Email"
+
+#: templates/usuarios/signup.html:43
+msgid "Confirmar contraseña"
+msgstr "Confirm password"
+
+#: templates/usuarios/signup.html:47
+msgid "Registrarse"
+msgstr "Sign up"
+
+#: templates/usuarios/signup.html:51
+msgid "¿Ya tienes cuenta?"
+msgstr "Already have an account?"
+
+#: templates/ventas/carrito.html:4 templates/ventas/carrito.html:10
+msgid "Mi carrito"
+msgstr "My cart"
+
+#: templates/ventas/carrito.html:11
+msgid "Revisa los vehículos seleccionados antes de confirmar tu compra."
+msgstr "Review the selected vehicles before confirming your purchase."
+
+#: templates/ventas/carrito.html:25
+msgid "Carrito vacío"
+msgstr "Empty cart"
+
+#: templates/ventas/carrito.html:26
+msgid "Tu carrito está vacío"
+msgstr "Your cart is empty"
+
+#: templates/ventas/carrito.html:27
+msgid "Explora el catálogo y añade vehículos que te interesen."
+msgstr "Explore the catalog and add vehicles you're interested in."
+
+#: templates/ventas/carrito.html:28 templates/ventas/mis_compras.html:28
+msgid "Ver vehículos disponibles"
+msgstr "View available vehicles"
+
+#: templates/ventas/carrito.html:55
+msgid "Quitar"
+msgstr "Remove"
+
+#: templates/ventas/carrito.html:66
+msgid "Resumen del pedido"
+msgstr "Order summary"
+
+#: templates/ventas/carrito.html:68
+msgid "Cantidad de vehículos"
+msgstr "Number of vehicles"
+
+#: templates/ventas/carrito.html:72
+msgid "Total a pagar"
+msgstr "Total to pay"
+
+#: templates/ventas/carrito.html:77
+msgid "Confirmar compra"
+msgstr "Confirm purchase"
+
+#: templates/ventas/carrito.html:79
+msgid "Seguir explorando"
+msgstr "Keep exploring"
+
+#: templates/ventas/carrito.html:80
+msgid "Al confirmar, los vehículos quedarán registrados a tu nombre."
+msgstr "Upon confirmation, the vehicles will be registered in your name."
+
+#: templates/ventas/mis_compras.html:10
+msgid "Historial de vehículos adquiridos en CarNest."
+msgstr "History of vehicles purchased on CarNest."
+
+#: templates/ventas/mis_compras.html:26
+msgid "Sin compras"
+msgstr "No purchases"
+
+#: templates/ventas/mis_compras.html:27
+msgid "Aún no has realizado ninguna compra."
+msgstr "You haven't made any purchases yet."
+
+#: templates/ventas/mis_compras.html:35
+msgid "Vehículo"
+msgstr "Vehicle"
+
+#: templates/ventas/mis_compras.html:39
+msgid "Precio pagado"
+msgstr "Price paid"
+
+#: templates/ventas/mis_compras.html:40
+msgid "Fecha de compra"
+msgstr "Purchase date"
+
+#: ventas/views.py:37
+#, python-format
+msgid "%(n)d vehículo(s) fueron removidos porque ya no están disponibles."
+msgstr "%(n)d vehicle(s) were removed because they are no longer available."
+
+#: ventas/views.py:60
+#, python-format
+msgid "%(v)s ya está en tu carrito."
+msgstr "%(v)s is already in your cart."
+
+#: ventas/views.py:64
+#, python-format
+msgid "%(v)s añadido al carrito."
+msgstr "%(v)s added to your cart."
+
+#: ventas/views.py:79
+msgid "Vehículo eliminado del carrito."
+msgstr "Vehicle removed from cart."
+
+#: ventas/views.py:91
+msgid "Tu carrito está vacío."
+msgstr "Your cart is empty."
+
+#: ventas/views.py:100
+#, python-format
+msgid "¡Compra exitosa! Adquiriste: %(v)s."
+msgstr "Purchase successful! You acquired: %(v)s."
+
+#: ventas/views.py:102
+#, python-format
+msgid "No se pudieron comprar: %(e)s"
+msgstr "Could not purchase: %(e)s"

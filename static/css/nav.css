@@ -1,0 +1,50 @@
+/* Barra principal CarNest */
+body.body-carnest {
+  background: #2a2a2a;
+}
+
+.navbar-carnest {
+  background: #141414 !important;
+  border-bottom: 1px solid #2d2d2d;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+
+.navbar-carnest .navbar-brand {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #f8fafc !important;
+}
+
+.navbar-carnest .navbar-brand:hover {
+  color: #cbd5e1 !important;
+}
+
+.navbar-carnest .navbar-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.navbar-carnest .navbar-brand-text {
+  line-height: 1;
+}
+
+.navbar-carnest .btn {
+  font-size: 1rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: 0.5rem;
+}
+
+.navbar-carnest .dropdown-toggle {
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.navbar-carnest .btn img {
+  width: 22px;
+  height: auto;
+}

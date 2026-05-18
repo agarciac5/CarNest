@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static i18n humanize cop_format %}
+
+{% block title %}{% trans "Mi carrito" %} — CarNest{% endblock %}
+
+{% block content %}
+<link href="{% static 'css/carrito.css' %}" rel="stylesheet">
+
+<div class="carrito-header mb-4">
+    <h1 class="h3">🛒 {% trans "Mi carrito" %}</h1>
+    <p class="text-white">{% trans "Revisa los vehículos seleccionados antes de confirmar tu compra." %}</p>
+</div>
+
+{% if messages %}
+    {% for msg in messages %}
+        <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+            {{ msg }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% if carrito_vacio %}
+    <div class="carrito-empty text-center py-5">
+        <img src="{% static 'img/carrito.png' %}" alt="{% trans 'Carrito vacío' %}" style="width:64px;opacity:.4">
+        <h4 class="mt-3 text-white">{% trans "Tu carrito está vacío" %}</h4>
+        <p class="text-white">{% trans "Explora el catálogo y añade vehículos que te interesen." %}</p>
+        <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary mt-3">{% trans "Ver vehículos disponibles" %}</a>
+    </div>
+{% else %}
+    <div class="row g-4">
+        <div class="col-lg-8">
+            {% for v in vehiculos %}
+            <div class="carrito-item card shadow-sm mb-3">
+                <div class="row g-0 align-items-center">
+                    <div class="col-4 col-md-3">
+                        {% if v.imagen %}
+                            <img src="{{ v.imagen.url }}" class="img-fluid rounded-start w-100 object-fit-cover" alt="{{ v.marca }} {{ v.modelo }}" style="max-height:130px; min-height:100px">
+                        {% else %}
+                            <img src="{% static 'img/default-car.jpg' %}" class="img-fluid rounded-start w-100 object-fit-cover" alt="{% trans 'Sin imagen' %}" style="max-height:130px; min-height:100px">
+                        {% endif %}
+                    </div>
+                    <div class="col-8 col-md-9">
+                        <div class="card-body d-flex justify-content-between align-items-start flex-wrap gap-2">
+                            <div>
+                                <h5 class="mb-1">{{ v.marca }} {{ v.modelo }}</h5>
+                                <p class="text-muted small mb-1">{{ v.año }} · {{ v.get_combustible_display }} · {{ v.get_transmision_display }}</p>
+                                {% if v.kilometraje %}
+                                    <p class="text-muted small mb-1">{{ v.kilometraje|cop_enteros }} km</p>
+                                {% endif %}
+                                <p class="price-carrito mb-0">${{ v.precio|cop_enteros }} <span class="text-muted small fw-normal">COP</span></p>
+                            </div>
+                            <form method="post" action="{% url 'eliminar_carrito' v.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">✕ {% trans "Quitar" %}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="carrito-resumen card shadow-sm p-4">
+                <h5 class="mb-3 border-bottom pb-2">{% trans "Resumen del pedido" %}</h5>
+                <div class="d-flex justify-content-between mb-2 text-muted small">
+                    <span>{% trans "Cantidad de vehículos" %}</span>
+                    <span>{{ vehiculos|length }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <strong>{% trans "Total a pagar" %}</strong>
+                    <strong class="price-total">${{ total|cop_enteros }} COP</strong>
+                </div>
+                <a href="{% url 'checkout_stripe' %}" class="btn btn-success w-100 btn-lg mb-2">
+                   {% trans "Pagar con Stripe" %}
+                </a>
+                <form method="post" action="{% url 'confirmar_compra' %}" class="mt-1">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-secondary w-100 btn-sm">
+                      {% trans "Confirmar sin pago (admin)" %}
+                    </button>
+                </form>
+                <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary w-100">← {% trans "Seguir explorando" %}</a>
+                <p class="text-muted small text-center mt-3 mb-0">{% trans "Al confirmar, los vehículos quedarán registrados a tu nombre." %}</p>
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

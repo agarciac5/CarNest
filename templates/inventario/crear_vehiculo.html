@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Publicar vehículo" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'lista_vehiculos' %}">{% trans "Vehículos" %}</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">{% trans "Publicar" %}</li>
+            </ol>
+        </nav>
+        <h1 class="h3 mb-4 text-white">{% trans "Publicar vehículo" %}</h1>
+
+        {% if request.user.rol == 'admin' %}
+            <p class="text-white small">{% trans "La publicación aparecerá directamente en el catálogo como En venta. Puedes subir una foto principal y varias adicionales." %}</p>
+        {% else %}
+            <p class="text-white small">{% trans "Tu vehículo será enviado a revisión. Una vez aprobado por nuestro equipo aparecerá en el catálogo." %}</p>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="card border-0 shadow-sm">
+            {% csrf_token %}
+            <div class="card-body p-4">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="marca">{% trans "Marca" %}</label>
+                        <input type="text" name="marca" id="marca" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="modelo">{% trans "Modelo" %}</label>
+                        <input type="text" name="modelo" id="modelo" class="form-control" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="año">{% trans "Año" %}</label>
+                        <input type="number" name="año" id="año" class="form-control" required min="1980" max="2035">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="precio">{% trans "Precio" %}</label>
+                        <input type="number" name="precio" id="precio" class="form-control" required min="0" step="0.01">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="kilometraje">{% trans "Kilometraje" %}</label>
+                        <input type="number" name="kilometraje" id="kilometraje" class="form-control" value="0" min="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="color">{% trans "Color" %}</label>
+                        <input type="text" name="color" id="color" class="form-control" placeholder="{% trans 'Ej. Blanco perla' %}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="combustible">{% trans "Combustible" %}</label>
+                        <select name="combustible" id="combustible" class="form-select">
+                            <option value="gasolina">{% trans "Gasolina" %}</option>
+                            <option value="diesel">{% trans "Diésel" %}</option>
+                            <option value="hibrido">{% trans "Híbrido" %}</option>
+                            <option value="electrico">{% trans "Eléctrico" %}</option>
+                            <option value="glp">GLP</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="transmision">{% trans "Transmisión" %}</label>
+                        <select name="transmision" id="transmision" class="form-select">
+                            <option value="manual">{% trans "Manual" %}</option>
+                            <option value="automatica">{% trans "Automática" %}</option>
+                            <option value="cvt">CVT</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="descripcion">{% trans "Descripción" %}</label>
+                        <textarea name="descripcion" id="descripcion" class="form-control" rows="4" placeholder="{% trans 'Historial, equipamiento, estado general…' %}"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="imagen">{% trans "Foto principal" %}</label>
+                        <input type="file" name="imagen" id="imagen" class="form-control" accept="image/*">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="fotos_extra">{% trans "Fotos adicionales (galería)" %}</label>
+                        <input type="file" name="fotos_extra" id="fotos_extra" class="form-control" accept="image/*" multiple>
+                        <div class="form-text">{% trans "Puedes seleccionar varias imágenes a la vez." %}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-light d-flex gap-2 justify-content-between flex-wrap">
+                <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary">{% trans "Cancelar" %}</a>
+                {% if request.user.rol == 'admin' %}
+                    <button type="submit" class="btn btn-success">{% trans "Publicar en inventario" %}</button>
+                {% else %}
+                    <button type="submit" class="btn btn-primary">{% trans "Enviar a revisión" %}</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

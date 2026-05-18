@@ -1,0 +1,66 @@
+/* ── Precios ───────────────────────────────────────────────────── */
+.price-carrito {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #2563eb;
+}
+
+.price-total {
+    font-size: 1.2rem;
+    color: #16a34a;
+}
+
+.price-compra {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+/* ── Tarjeta de ítem en carrito ────────────────────────────────── */
+.carrito-item {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    border-radius: 10px;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.carrito-item:hover {
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+/* ── Panel resumen ─────────────────────────────────────────────── */
+.carrito-resumen {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+    border-radius: 12px;
+    position: sticky;
+    top: 1.5rem;
+}
+
+.carrito-resumen h5 {
+    color: #f1f5f9;
+}
+
+.carrito-resumen .border-bottom {
+    border-color: #334155 !important;
+}
+
+/* ── Estado vacío ──────────────────────────────────────────────── */
+.carrito-empty img {
+    filter: invert(1);
+}
+
+.carrito-header h1 {
+    color: #f1f5f9;
+}
+
+/* ── Tabla mis compras ─────────────────────────────────────────── */
+.table-dark {
+    --bs-table-bg: #1e293b;
+    --bs-table-striped-bg: #1a2535;
+    --bs-table-hover-bg: #243349;
+    --bs-table-border-color: #334155;
+    color: #f1f5f9;
+}

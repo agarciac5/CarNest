@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Anuncio enviado" %} — CarNest{% endblock %}
+
+{% block content %}
+<div class="text-center py-5">
+    <div style="font-size:4rem;">📋</div>
+    <h2 class="text-white mt-3">{% trans "¡Tu anuncio fue enviado!" %}</h2>
+    <p class="text-white mt-2" style="max-width:480px; margin:0 auto;">
+        {% trans "Nuestro equipo revisará tu vehículo y lo incorporará al inventario si cumple con nuestros estándares. Podrás verlo en el catálogo una vez sea aprobado." %}
+    </p>
+    <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{% url 'lista_vehiculos' %}" class="btn btn-primary">{% trans "Ver catálogo" %}</a>
+        <a href="{% url 'crear_vehiculo' %}" class="btn btn-outline-light">{% trans "Publicar otro vehículo" %}</a>
+    </div>
+</div>
+{% endblock %}

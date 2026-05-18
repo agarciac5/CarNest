@@ -1,0 +1,41 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ idioma|default:'es' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}CarNest{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'css/nav.css' %}" rel="stylesheet">
+    <link href="{% static 'css/auth.css' %}" rel="stylesheet">
+    <link href="{% static 'css/idioma.css' %}" rel="stylesheet">
+</head>
+<body class="body-carnest">
+
+{% if mostrar_selector %}
+    {% include 'partials/selector_idioma.html' %}
+{% endif %}
+
+<nav class="navbar navbar-dark navbar-carnest navbar-expand-lg">
+    <div class="container">
+        {% include 'partials/brand.html' %}
+        <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
+            {% block auth_nav_extra %}{% endblock %}
+            <form method="post" action="" class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="_set_idioma" value="1">
+                <input type="hidden" name="idioma" value="{% if idioma == 'en' %}es{% else %}en{% endif %}">
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    {% if idioma == 'en' %}🇨🇴 ES{% else %}🇺🇸 EN{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="auth-shell">
+    {% block content %}{% endblock %}
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

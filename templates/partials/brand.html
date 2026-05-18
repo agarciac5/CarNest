@@ -1,0 +1,7 @@
+{% load i18n %}
+<a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+    {% if carnest_logo_url %}
+        <img src="{{ carnest_logo_url }}" alt="CarNest" class="navbar-logo" width="40" height="40" loading="lazy">
+    {% endif %}
+    <span class="navbar-brand-text">CarNest</span>
+</a>
