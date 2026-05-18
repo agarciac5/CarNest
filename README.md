@@ -1,10 +1,10 @@
-# CarNest 🚗
+# CarNest 
 
 Plataforma web de compra y venta de vehículos usados. Permite a usuarios particulares publicar sus vehículos, a la concesionaria gestionar el inventario y a los compradores explorar y adquirir vehículos verificados.
 
 ---
 
-## 🌐 Despliegue en producción
+##  Despliegue en producción
 
 La aplicación está desplegada en Google Cloud Platform:
 
@@ -17,14 +17,14 @@ La aplicación está desplegada en Google Cloud Platform:
 
 ---
 
-## 📋 Requisitos (desarrollo local)
+##  Requisitos (desarrollo local)
 
 - Docker Desktop instalado y corriendo
 - Git instalado
 
 ---
 
-# 🚀 Cómo ejecutar el proyecto (desarrollo local)
+#  Cómo ejecutar el proyecto (desarrollo local)
 
 ## 1. Clonar el repositorio
 
@@ -87,7 +87,7 @@ docker compose exec web python manage.py createsuperuser
 
 ---
 
-# 🗺️ Rutas principales (desarrollo local)
+#  Rutas principales (desarrollo local)
 
 | Ruta | Descripción |
 |---|---|
@@ -107,9 +107,9 @@ docker compose exec web python manage.py createsuperuser
 
 ---
 
-# ✨ Funcionalidades implementadas
+#  Funcionalidades implementadas
 
-## 🛒 Sistema de compras y carrito
+##  Sistema de compras y carrito
 
 - Agregar y eliminar vehículos del carrito
 - Persistencia del carrito en sesión
@@ -146,7 +146,7 @@ Usar:
 
 ---
 
-## 🌎 Internacionalización (i18n)
+##  Internacionalización (i18n)
 
 - Soporte completo en **español** e **inglés**
 - Selector de idioma al primer acceso
@@ -167,7 +167,7 @@ curl http://34.27.19.160/api/vehiculos/1/
 
 ---
 
-## 🌐 Consumo de API externa
+##  Consumo de API externa
 
 - Integración con `open.er-api.com` para tipo de cambio USD → COP en tiempo real
 - El precio en USD aparece en el detalle de cada vehículo cuando el idioma es inglés
@@ -175,7 +175,7 @@ curl http://34.27.19.160/api/vehiculos/1/
 
 ---
 
-## 🧩 Inversión de dependencias
+##  Inversión de dependencias
 
 Una interfaz (`ITipoCambioService`) con múltiples implementaciones:
 
@@ -187,7 +187,7 @@ Las vistas no dependen directamente de servicios concretos, usando `core/depende
 
 ---
 
-## 🧪 Pruebas unitarias
+##  Pruebas unitarias
 
 ```bash
 docker compose exec web python manage.py test core --verbosity=2
@@ -202,7 +202,7 @@ Tests cubriendo:
 
 ---
 
-# 🏗️ Arquitectura de producción (GCP)
+#  Arquitectura de producción (GCP)
 
 ```text
 Internet
@@ -218,7 +218,7 @@ PostgreSQL 15
 
 ---
 
-# ☁️ Despliegue en GCP
+#  Despliegue en GCP
 
 ## 1. Clonar proyecto
 
@@ -252,7 +252,7 @@ docker compose -f docker-compose.prod.yml --env-file .env up --build -d
 
 ---
 
-# 🛠️ Comandos útiles en producción
+#  Comandos útiles en producción
 
 ## Ver estado
 
@@ -303,7 +303,7 @@ docker compose -f docker-compose.prod.yml exec web python manage.py compilemessa
 
 ---
 
-# 🔑 Roles de usuario
+#  Roles de usuario
 
 | Rol | Permisos |
 |---|---|
@@ -312,7 +312,7 @@ docker compose -f docker-compose.prod.yml exec web python manage.py compilemessa
 
 ---
 
-# 🛠️ Stack tecnológico
+#  Stack tecnológico
 
 | Componente | Tecnología |
 |---|---|
@@ -328,7 +328,7 @@ docker compose -f docker-compose.prod.yml exec web python manage.py compilemessa
 
 ---
 
-# 📁 Estructura del proyecto
+#  Estructura del proyecto
 
 ```text
 CarNest/
@@ -364,7 +364,7 @@ CarNest/
 
 ---
 
-# 👥 Equipo
+#  Equipo
 
 Proyecto desarrollado para la materia de Ingeniería de Software.
 
