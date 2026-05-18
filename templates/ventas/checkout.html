@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static i18n humanize cop_format %}
+
+{% block title %}{% trans "Pago seguro" %} — CarNest{% endblock %}
+
+{% block content %}
+<link href="{% static 'css/carrito.css' %}" rel="stylesheet">
+
+<style>
+  .checkout-card { background: #1a1a2e; border: 1px solid #2d2d4e; border-radius: 12px; }
+  .stripe-field  { background: #0f0f23; border: 1px solid #3a3a5c; border-radius: 8px;
+                   padding: 14px 16px; transition: border-color .2s; }
+  .stripe-field.focused { border-color: #635bff; }
+  .stripe-field.invalid { border-color: #fa755a; }
+  .btn-pagar     { background: #635bff; border: none; font-size: 1.1rem;
+                   letter-spacing: .5px; padding: 14px; transition: background .2s; }
+  .btn-pagar:hover:not(:disabled) { background: #5144d3; }
+  .btn-pagar:disabled  { opacity: .6; cursor: not-allowed; }
+  #payment-error { color: #fa755a; font-size: .92rem; min-height: 22px; }
+  .badge-test    { background: #635bff22; color: #a29bfe; border: 1px solid #635bff55;
+                   font-size: .75rem; border-radius: 6px; padding: 4px 10px; }
+  .lock-icon     { font-size: 1.2rem; }
+  .resumen-item  { border-bottom: 1px solid #2d2d4e; padding: 10px 0; }
+  .resumen-item:last-child { border-bottom: none; }
+</style>
+
+<!-- Stripe.js — SIEMPRE desde js.stripe.com, nunca local -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<div class="container py-4">
+  <div class="carrito-header mb-4">
+    <h1 class="h3"> {% trans "Pago seguro con Stripe" %}</h1>
+    <span class="badge-test">{% trans "Modo prueba — usa la tarjeta" %} 4242 4242 4242 4242</span>
+  </div>
+
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="alert alert-{{ msg.tags }} alert-dismissible fade show" role="alert">
+        {{ msg }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="row g-4">
+
+    <!-- ── Formulario de pago ───────────────────────────────────────── -->
+    <div class="col-lg-7">
+      <div class="checkout-card p-4">
+
+        <h5 class="mb-4 text-white">💳 {% trans "Datos de pago" %}</h5>
+
+        <!-- Dato de prueba visible -->
+        <div class="alert alert-info py-2 px-3 mb-4" style="font-size:.85rem;">
+          <strong>{% trans "Tarjeta de prueba:" %}</strong>
+          <code>4242 4242 4242 4242</code> &nbsp;|&nbsp;
+          {% trans "Fecha:" %} <code>12/26</code> &nbsp;|&nbsp;
+          {% trans "CVV:" %} <code>123</code>
+        </div>
+
+        <div id="payment-form">
+
+          <!-- Stripe Card Element se inyecta aquí -->
+          <div class="mb-3">
+            <label class="form-label text-white small">
+              {% trans "Número de tarjeta, fecha y CVV" %}
+            </label>
+            <div id="card-element" class="stripe-field"></div>
+          </div>
+
+          <!-- Mensajes de error de Stripe -->
+          <div id="payment-error" class="mb-3"></div>
+
+          <button id="btn-pagar" class="btn btn-pagar btn-lg w-100 text-white fw-bold mt-2" disabled>
+            <span id="btn-texto">
+               {% trans "Pagar" %} ${{ total|cop_enteros }} COP
+            </span>
+            <span id="btn-spinner" class="d-none">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              {% trans "Procesando..." %}
+            </span>
+          </button>
+
+          <p class="text-muted small text-center mt-3 mb-0">
+            <span class="lock-icon"></span>
+            {% trans "Pago cifrado con TLS. CarNest nunca almacena tus datos bancarios." %}
+          </p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Resumen del pedido ───────────────────────────────────────── -->
+    <div class="col-lg-5">
+      <div class="checkout-card p-4">
+        <h5 class="mb-3 border-bottom pb-2 text-white">{% trans "Resumen del pedido" %}</h5>
+
+        {% for v in vehiculos %}
+        <div class="resumen-item d-flex justify-content-between align-items-center">
+          <div>
+            <p class="mb-0 text-white fw-semibold small">{{ v.marca }} {{ v.modelo }}</p>
+            <p class="mb-0 text-muted" style="font-size:.78rem;">{{ v.año }} · {{ v.get_combustible_display }}</p>
+          </div>
+          <span class="text-white small fw-bold">${{ v.precio|cop_enteros }}</span>
+        </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-between mt-3 pt-2 border-top">
+          <strong class="text-white">{% trans "Total" %}</strong>
+          <strong class="price-total">${{ total|cop_enteros }} COP</strong>
+        </div>
+      </div>
+
+      <a href="{% url 'ver_carrito' %}" class="btn btn-outline-secondary w-100 mt-3">
+        ← {% trans "Volver al carrito" %}
+      </a>
+    </div>
+
+  </div><!-- /row -->
+</div><!-- /container -->
+
+<!-- ─── Stripe Elements JS ─────────────────────────────────────────────── -->
+<script>
+(function() {
+  const PUBLIC_KEY   = "{{ stripe_public_key }}";
+  const CLIENT_SECRET = "{{ client_secret }}";
+
+  // URLs de retorno
+  const URL_EXITO    = "{% url 'checkout_exito' %}";
+  const URL_CANCEL   = "{% url 'checkout_cancelado' %}";
+
+  const stripe  = Stripe(PUBLIC_KEY);
+  const elements = stripe.elements();
+
+  // Estilo del campo de tarjeta
+  const style = {
+    base: {
+      color: '#e0e0f0',
+      fontFamily: "'Segoe UI', sans-serif",
+      fontSize: '16px',
+      '::placeholder': { color: '#6b6b8a' },
+    },
+    invalid: { color: '#fa755a', iconColor: '#fa755a' },
+  };
+
+  const cardElement = elements.create('card', { style, hidePostalCode: true });
+  cardElement.mount('#card-element');
+
+  const btnPagar    = document.getElementById('btn-pagar');
+  const errorDiv    = document.getElementById('payment-error');
+  const btnTexto    = document.getElementById('btn-texto');
+  const btnSpinner  = document.getElementById('btn-spinner');
+  const cardDiv     = document.getElementById('card-element');
+
+  // Habilitar botón cuando la tarjeta es válida
+  cardElement.on('change', function(event) {
+    cardDiv.classList.toggle('focused', false);
+    cardDiv.classList.toggle('invalid', !!event.error);
+
+    if (event.error) {
+      errorDiv.textContent = event.error.message;
+      btnPagar.disabled = true;
+    } else {
+      errorDiv.textContent = '';
+      btnPagar.disabled = !event.complete;
+    }
+  });
+
+  cardElement.on('focus', () => cardDiv.classList.add('focused'));
+  cardElement.on('blur',  () => cardDiv.classList.remove('focused'));
+
+  // Click en "Pagar"
+  btnPagar.addEventListener('click', async function() {
+    btnPagar.disabled = true;
+    btnTexto.classList.add('d-none');
+    btnSpinner.classList.remove('d-none');
+    errorDiv.textContent = '';
+
+    const { paymentIntent, error } = await stripe.confirmCardPayment(CLIENT_SECRET, {
+      payment_method: { card: cardElement },
+    });
+
+    if (error) {
+      // Mostrar error al usuario
+      errorDiv.textContent = error.message;
+      btnPagar.disabled = false;
+      btnTexto.classList.remove('d-none');
+      btnSpinner.classList.add('d-none');
+      return;
+    }
+
+    if (paymentIntent.status === 'succeeded') {
+      // Redirigir a la vista de éxito
+      window.location.href = URL_EXITO
+        + '?payment_intent=' + paymentIntent.id
+        + '&payment_intent_client_secret=' + paymentIntent.client_secret;
+    }
+  });
+})();
+</script>
+{% endblock %}

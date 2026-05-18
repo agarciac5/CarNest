@@ -21,6 +21,16 @@ class Venta(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
     precio_final = models.DecimalField(max_digits=12, decimal_places=2)
 
+    # Campos Stripe — solo se rellenan cuando el pago pasa por la pasarela
+    stripe_payment_intent = models.CharField(
+        max_length=200, blank=True, default='',
+        verbose_name='Stripe Payment Intent ID',
+    )
+    stripe_status = models.CharField(
+        max_length=50, blank=True, default='',
+        verbose_name='Estado Stripe',
+    )
+
     def realizar_venta(self):
         if self.vehiculo.estado != 'en_venta':
             raise ValidationError("Este vehículo no está disponible para venta.")

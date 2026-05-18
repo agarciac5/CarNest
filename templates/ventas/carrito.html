@@ -72,9 +72,14 @@
                     <strong>{% trans "Total a pagar" %}</strong>
                     <strong class="price-total">${{ total|cop_enteros }} COP</strong>
                 </div>
-                <form method="post" action="{% url 'confirmar_compra' %}">
+                <a href="{% url 'checkout_stripe' %}" class="btn btn-success w-100 btn-lg mb-2">
+                   {% trans "Pagar con Stripe" %}
+                </a>
+                <form method="post" action="{% url 'confirmar_compra' %}" class="mt-1">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success w-100 btn-lg mb-2">✔ {% trans "Confirmar compra" %}</button>
+                    <button type="submit" class="btn btn-outline-secondary w-100 btn-sm">
+                      {% trans "Confirmar sin pago (admin)" %}
+                    </button>
                 </form>
                 <a href="{% url 'lista_vehiculos' %}" class="btn btn-outline-secondary w-100">← {% trans "Seguir explorando" %}</a>
                 <p class="text-muted small text-center mt-3 mb-0">{% trans "Al confirmar, los vehículos quedarán registrados a tu nombre." %}</p>

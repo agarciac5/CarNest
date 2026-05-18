@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -115,3 +118,14 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# ── Stripe (pasarela de pagos) ──────────────────────────────────────────────
+# Crea tu cuenta en https://dashboard.stripe.com y consigue las claves en:
+# Dashboard → Developers → API keys
+#
+# En desarrollo, las claves de PRUEBA empiezan con sk_test_ y pk_test_
+# NUNCA pongas la clave secreta directamente en código; usa variables de entorno.
+STRIPE_PUBLIC_KEY   = os.environ.get('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY   = os.environ.get('STRIPE_SECRET_KEY')
+
+
